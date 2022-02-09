@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
+import * as QueryString from "query-string";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
 import path from "../../utils/path";
@@ -13,7 +14,11 @@ import CustomizeProfile from "../../component/CustomizeProfile";
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
 const AddGoalPage = () => {
   const navigate = useNavigate();
-    
+  const location = useLocation();
+  const { happy } = QueryString.parse(
+    location.search
+  );
+
   const [name, setName] = useState("Cat in the Hat");
   const onChangeContent = (value) => {
     setName(value);
@@ -77,7 +82,14 @@ const AddGoalPage = () => {
       <div>
         <img src={Logo} alt="Logo" />
         <div className={styles.top}>
-          <CustomizeButton title="任務清單" status="contained" mr="" click={()=>{navigate(path.home);}}/>
+          <CustomizeButton
+            title="任務清單"
+            status="contained"
+            mr=""
+            click={() => {
+              navigate(path.home);
+            }}
+          />
           <CustomizeProfile name="淯宣" />
         </div>
         <CustomizeInput
@@ -88,9 +100,20 @@ const AddGoalPage = () => {
         <CustomizeDatepicker title="截止日期" onChangeDate={onChangeDate} />
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
-          <CustomizeButton title="新增" status="outlined" mr="32" />
-          <CustomizeButton title="取消" status="outlined" mr="0" />
+          <CustomizeButton
+            title="新增"
+            status="outlined"
+            mr="32"
+            click={sendMessage}
+          />
+          <CustomizeButton
+            title="取消"
+            status="outlined"
+            mr="0"
+            click={getUserInfo}
+          />
         </div>
+        {happy}
       </div>
     </div>
   );
