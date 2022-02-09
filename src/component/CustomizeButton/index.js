@@ -30,6 +30,7 @@ const CustomizeButton = (props) => {
           size="medium"
           className={classes.contained}
           style={{ marginRight: props.mr + "px" }}
+          onClick={props.click}
         >
           {props.title}
         </Button>
@@ -39,6 +40,7 @@ const CustomizeButton = (props) => {
           size="medium"
           className={classes.outlined}
           style={{ marginRight: props.mr + "px" }}
+          onClick={props.click}
         >
           {props.title}
         </Button>

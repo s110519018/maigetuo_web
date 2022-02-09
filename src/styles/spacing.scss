@@ -1,2 +1,12 @@
 $PersonIcon-border-radius: 5px;
 
+@mixin pad {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media (max-width: 375px) {
+    @content;
+  }
+}

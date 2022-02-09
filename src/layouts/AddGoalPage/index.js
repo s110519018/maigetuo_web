@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
+import path from "../../utils/path";
 import Logo from "../../assets/image/Logo.png";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeDatepicker from "../../component/CustomizeDatepicker";
@@ -10,6 +12,8 @@ import CustomizeProfile from "../../component/CustomizeProfile";
 
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
 const AddGoalPage = () => {
+  const navigate = useNavigate();
+    
   const [name, setName] = useState("Cat in the Hat");
   const onChangeContent = (value) => {
     setName(value);
@@ -73,7 +77,7 @@ const AddGoalPage = () => {
       <div>
         <img src={Logo} alt="Logo" />
         <div className={styles.top}>
-          <CustomizeButton title="任務清單" status="contained" mr="" />
+          <CustomizeButton title="任務清單" status="contained" mr="" click={()=>{navigate(path.home);}}/>
           <CustomizeProfile name="淯宣" />
         </div>
         <CustomizeInput
