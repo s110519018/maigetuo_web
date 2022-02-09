@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import liff from "@line/liff";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeDatepicker from "../../component/CustomizeDatepicker";
@@ -72,7 +70,6 @@ const AddGoalPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* <Box sx={{ "& button": { m: 1 } }}> */}
       <div>
         <div className={styles.top}>
         <CustomizeButton title="任務清單" status="contained" mr=""/>
@@ -86,10 +83,9 @@ const AddGoalPage = () => {
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
           <CustomizeButton title="新增" status="outlined" mr="32"/>
-          <CustomizeButton title="取消" status="outlined" mr=""/>
+          <CustomizeButton title="取消" status="outlined" mr="0"/>
         </div>
       </div>
-      {/* </Box> */}
     </div>
   );
 };
