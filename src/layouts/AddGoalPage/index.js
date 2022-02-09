@@ -74,10 +74,7 @@ const AddGoalPage = () => {
       }
     });
   };
-  useEffect(() => {
-    liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID });
-  }, []);
+
   return (
     <div className={styles.container}>
       <div>
