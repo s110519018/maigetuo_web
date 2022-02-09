@@ -2,3 +2,25 @@
 @import "../../styles/spacing.scss";
 @import "../../styles/font.scss";
 
+.content {
+  position: relative;
+  background-color: $Personbg;
+  padding: 4px 10px;
+  border-radius: $PersonIcon-border-radius;
+  max-width: 150px;
+  @include content;
+  color: $color-white;
+  padding-left: 30px;
+  text-align: end;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.person_icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $PersonIconbg;
+  height: 100%;
+  border-radius: $PersonIcon-border-radius 0px 0px $PersonIcon-border-radius;
+}

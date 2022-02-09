@@ -9,10 +9,17 @@
     padding: 20px;
 }
 .top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 28px;
 }
 .buttons{
     margin-top: 32px;
     display: flex;
     justify-content: flex-end;
+}
+img{
+    width: 100%;
+    margin-bottom: 32px;
 }

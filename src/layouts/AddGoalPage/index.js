@@ -2,11 +2,11 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
+import Logo from "../../assets/image/Logo.png";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeDatepicker from "../../component/CustomizeDatepicker";
 import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProfile from "../../component/CustomizeProfile";
-
 
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
 const AddGoalPage = () => {
@@ -71,8 +71,10 @@ const AddGoalPage = () => {
   return (
     <div className={styles.container}>
       <div>
+        <img src={Logo} alt="Logo" />
         <div className={styles.top}>
-        <CustomizeButton title="任務清單" status="contained" mr=""/>
+          <CustomizeButton title="任務清單" status="contained" mr="" />
+          <CustomizeProfile name="淯宣" />
         </div>
         <CustomizeInput
           title="任務名稱"
@@ -82,8 +84,8 @@ const AddGoalPage = () => {
         <CustomizeDatepicker title="截止日期" onChangeDate={onChangeDate} />
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
-          <CustomizeButton title="新增" status="outlined" mr="32"/>
-          <CustomizeButton title="取消" status="outlined" mr="0"/>
+          <CustomizeButton title="新增" status="outlined" mr="32" />
+          <CustomizeButton title="取消" status="outlined" mr="0" />
         </div>
       </div>
     </div>

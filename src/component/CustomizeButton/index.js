@@ -6,28 +6,25 @@ const CustomizeButton = (props) => {
   const status = props.status;
   const useStyles = makeStyles({
     contained: {
-      background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-      border: 0,
-      borderRadius: 3,
-      boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+      background: "#C4C4C4 !important",
+      borderRadius: "10px !important",
+      boxShadow: "none !important",
       color: "white",
-      height: 48,
-      padding: "0 30px",
+      padding: "4px 16px !important",
     },
     outlined: {
-      background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-      border: 0,
-      borderRadius: 3,
-      boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-      color: "white",
-      height: 48,
-      padding: "0 30px",
+      background: "#fff !important",
+      border: "1px solid black !important",
+      borderRadius: "10px !important",
+      boxShadow: "none !important",
+      color: "black !important",
+      padding: "4px 16px !important",
     },
   });
   const classes = useStyles();
   return (
     <Fragment>
-      {status == "contained" ? (
+      {status === "contained" ? (
         <Button
           variant="contained"
           size="medium"
