@@ -1,0 +1,18 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+.container{
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+}
+.top{
+    margin-bottom: 28px;
+}
+.buttons{
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+}

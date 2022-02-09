@@ -1,0 +1,16 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.title{
+    @include sencond-title;
+    margin-right: 24px;
+    white-space: nowrap;
+}
