@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as QueryString from "query-string";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
@@ -15,9 +15,7 @@ import CustomizeProfile from "../../component/CustomizeProfile";
 const AddGoalPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { happy } = QueryString.parse(
-    location.search
-  );
+  const { happy } = QueryString.parse(location.search);
 
   const [name, setName] = useState("Cat in the Hat");
   const onChangeContent = (value) => {
@@ -76,7 +74,10 @@ const AddGoalPage = () => {
       }
     });
   };
-
+  useEffect(() => {
+    liff
+      .init({ liffId: process.env.REACT_APP_LIFF_ID });
+  }, []);
   return (
     <div className={styles.container}>
       <div>
