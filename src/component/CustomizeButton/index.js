@@ -6,10 +6,10 @@ const CustomizeButton = (props) => {
   const status = props.status;
   const useStyles = makeStyles({
     contained: {
-      background: "#C4C4C4 !important",
+      background: "#9E9B9B !important",
       borderRadius: "10px !important",
       boxShadow: "none !important",
-      color: "white",
+      color: "black !important",
       padding: "4px 16px !important",
     },
     outlined: {

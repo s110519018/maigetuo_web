@@ -1,4 +1,7 @@
 $PersonIcon-border-radius: 5px;
+$card-border-radius: 10px;
+$card-spacing: 14px;
+
 
 @mixin pad {
   @media (max-width: 768px) {

@@ -85,7 +85,7 @@ const AddGoalPage = () => {
             status="contained"
             mr=""
             click={() => {
-              navigate(path.home);
+              navigate(path.goallistpage);
             }}
           />
           <CustomizeProfile name="淯宣" />
