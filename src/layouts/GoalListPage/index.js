@@ -4,14 +4,26 @@ import styles from "./styles.module.scss";
 import path from "../../utils/path";
 import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProgress from "../../component/CustomizeProgress";
+import Alert from "../../component/Alert";
 
 //https://stackoverflow.com/questions/44890663/how-do-i-sort-and-display-a-react-array-by-year-and-month 
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
+  const [Alertshow, setAlertshow] = React.useState(false);
+  const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
+
+  const handleClickOpen = () => {
+    setAlertshow(true);
+  };
+
+  const handleClose = () => {
+    setAlertshow(false);
+  };
 
   return (
     <div className={styles.container}>
+      <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
       <div>
         <div className={styles.top}>
           <CustomizeButton
@@ -32,36 +44,36 @@ const GoalListPage = () => {
         <div className={styles.goal_bar}>
           
           <div className={styles.month}>本月任務</div>
-          <div className={styles.goal} onClick={()=>{console.log("ddd")}}>
+          <div className={styles.goal} onClick={()=>{navigate(path.goaldetailpage)}}>
             <div className={styles.name}>育萱</div>
             <div className={styles.title}>架構圖規劃</div>
-            <div className={styles.date}>2022/02/26</div>
+            <div className={styles.date} >2022/02/26</div>
             <CustomizeProgress value={34}/>
             <div className={styles.user}>
               <div>
                 <CustomizeButton
                   title="編輯"
                   status="outlined"
-                  mr="8"
-                  click={() => {
-                    console.log("rr");
+                  click={(event) => {
+                    navigate(path.editgoalpage);
+                    event.stopPropagation();
                   }}
                 />
                 <CustomizeButton
                   title="刪除"
                   status="outlined"
-                  mr="0"
-                  click={() => {
-                    console.log("rr");
+                  click={(event) => {
+                    handleClickOpen();
+                    event.stopPropagation();
                   }}
                 />
               </div>
               <CustomizeButton
                 title="更新進度"
                 status="contained"
-                mr="0"
-                click={() => {
-                  console.log("rr");
+                click={(event) => {
+                  navigate(path.goaldetailpage);
+                  event.stopPropagation();
                 }}
               />
             </div>
@@ -69,7 +81,6 @@ const GoalListPage = () => {
               <CustomizeButton
                 title="規劃進度"
                 status="contained"
-                mr="0"
                 click={() => {
                   console.log("rr");
                 }}

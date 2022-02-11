@@ -1,91 +1,90 @@
 @import "../../styles/color.scss";
 @import "../../styles/spacing.scss";
 @import "../../styles/font.scss";
-.container{
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
+.container {
+  @include container;
 }
 
-.container>div{
-    // border: 1px solid black;
-    max-width: 300px;
-    width: 90vw;
+.container > div {
+  // border: 1px solid black;
+  @include divsetting;
 }
 
-.top{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 20px;
+.top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
 }
-.status_bar{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+.status_bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   align-content: space-between;
   justify-content: flex-start;
-  margin: -10px 0 0 0;
+  gap: 8px;
 }
-.status{
-    padding: 4px 8px;
-    background-color: #c4c4c4;
-    @include content;
-    margin-right: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-top: 10px;
+.status {
+  padding: 4px 8px;
+  background-color: #c4c4c4;
+  @include content;
+  margin-right: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.goal_bar{
-    display: flex;
-    flex-direction: column;
+.goal_bar {
+  display: flex;
+  flex-direction: column;
 }
-.goal_bar>div{
-    margin: $card-spacing 0px;
+.goal_bar > div {
+  margin: $card-spacing 0px;
 }
-.name{
-    padding: 4px;
-    background-color: #9E9B9B;
-    border-radius: $PersonIcon-border-radius;
-    @include content;
+.name {
+  padding: 4px;
+  background-color: $namebg;
+  border-radius: $PersonIcon-border-radius;
+  @include content;
 }
-.month{
-    align-self: flex-start;
-    border-radius: $PersonIcon-border-radius;
-    border: 1px solid black;
-    background: #fff ;
-    color: black;
-    padding: 4px 16px;
-    @include content;
+.month {
+  align-self: flex-start;
+  border-radius: $PersonIcon-border-radius;
+  border: 1px solid black;
+  background: #fff;
+  color: black;
+  padding: 4px 16px;
+  @include content;
 }
-.goal{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 12px 20px;
-    width: 100%;
-    background-color: #C4C4C4;
-    border-radius: $card-border-radius;
+.goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 20px;
+  width: 100%;
+  background-color: $goalbg;
+  border-radius: $card-border-radius;
+  cursor: pointer;
 }
-.goal>div{
-    margin: 8px 0 0 8px;
+.goal > div {
+  margin: 8px 0 0 8px;
 }
-.title{
-    @include title_regular;
+.title {
+  @include title_regular;
 }
-.date{
-    @include content;
+.date {
+  @include content;
 }
-.user{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.user>div{
-    text-align: center;
-    margin-bottom: 8px;
+.user > div {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 8px;
 }

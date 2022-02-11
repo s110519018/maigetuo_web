@@ -2,14 +2,26 @@ $PersonIcon-border-radius: 5px;
 $card-border-radius: 10px;
 $card-spacing: 14px;
 
+@mixin container {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-@mixin pad {
-  @media (max-width: 768px) {
-    @content;
-  }
+@mixin divsetting {
+  max-width: 360px;
+  width: 90vw;
 }
-@mixin mobile {
-  @media (max-width: 375px) {
-    @content;
-  }
-}
+
+// @mixin pad {
+//   @media (max-width: 768px) {
+//     @content;
+//   }
+// }
+// @mixin mobile {
+//   @media (max-width: 375px) {
+//     @content;
+//   }
+// }

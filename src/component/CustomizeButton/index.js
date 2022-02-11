@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@material-ui/styles";
+import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
 
 const CustomizeButton = (props) => {
   const status = props.status;
@@ -29,20 +30,27 @@ const CustomizeButton = (props) => {
           variant="contained"
           size="medium"
           className={classes.contained}
-          style={{ marginRight: props.mr + "px" }}
+          onClick={props.click}
+        >
+          {props.title}
+        </Button>
+      ) : status === "outlined" ? (
+        <Button
+          variant="outlined"
+          size="medium"
+          className={classes.outlined}
           onClick={props.click}
         >
           {props.title}
         </Button>
       ) : (
         <Button
-          variant="outlined"
+          variant="contained"
           size="medium"
-          className={classes.outlined}
-          style={{ marginRight: props.mr + "px" }}
+          className={classes.contained}
           onClick={props.click}
         >
-          {props.title}
+          <ArrowBackSharpIcon fontSize="large" />
         </Button>
       )}
     </Fragment>

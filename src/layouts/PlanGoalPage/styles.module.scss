@@ -1,0 +1,11 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+
+.container {
+  @include container;
+}
+.container > div {
+  //   border: 1px solid black;
+  @include divsetting;
+}

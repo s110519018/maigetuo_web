@@ -12,7 +12,7 @@ import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProfile from "../../component/CustomizeProfile";
 
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
-const AddGoalPage = () => {
+const EditGoalPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { happy } = QueryString.parse(location.search);
@@ -98,7 +98,7 @@ const AddGoalPage = () => {
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
           <CustomizeButton
-            title="新增"
+            title="儲存"
             status="outlined"
             click={sendMessage}
           />
@@ -116,4 +116,4 @@ const AddGoalPage = () => {
   );
 };
 
-export default AddGoalPage;
+export default EditGoalPage;
