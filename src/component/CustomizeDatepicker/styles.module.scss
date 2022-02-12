@@ -2,16 +2,22 @@
 @import "../../styles/spacing.scss";
 @import "../../styles/font.scss";
 
-.container{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 16px;
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  @include mobile {
+    flex-wrap: wrap;
+  }
 }
 
-.title{
-    @include sencond-title;
-    margin-right: 24px;
-    white-space: nowrap;
+.title {
+  @include sencond-title;
+  margin-right: 24px;
+  white-space: nowrap;
+  @include mobile {
+    margin-right: 8px;
+  }
 }

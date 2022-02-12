@@ -4,8 +4,115 @@
 
 .container {
   @include container;
+  @include mobile {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 .container > div {
   //   border: 1px solid black;
   @include divsetting;
+  // min-width: 300px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.planpart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.plan {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.plantitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  @include sencond-title;
+}
+.addicon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.planlist {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 24px 16px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.misson {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  @include mobile {
+    display: flex;
+    background-color: $finish_status-bg;
+    border-radius: 5px;
+  }
+}
+.misson_content {
+  display: flex;
+  justify-content: space-between ;
+  gap: 4px;
+  @include mobile {
+    flex-direction: column;
+  }
+}
+.misson_setting {
+  cursor: pointer;
+}
+
+.deletemodal {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  button {
+    border-radius: 20px;
+    padding: 8px 20px;
+    width: 50vw;
+    max-width: 600px;
+    background: none;
+    color: inherit;
+    border: none;
+    @include sencond-title;
+    cursor: pointer;
+    outline: inherit;
+  }
+  .deletebtn{
+    background-color: $goalbg;
+  }
+  .cancelbtn{
+    border: 1px solid black;
+  }
+}
+
+.addmodal{
+  button {
+    border-radius: 20px;
+    padding: 8px 20px;
+    width: 50vw;
+    max-width: 600px;
+    background: none;
+    color: inherit;
+    border: none;
+    @include sencond-title;
+    cursor: pointer;
+    outline: inherit;
+  }
 }

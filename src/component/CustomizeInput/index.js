@@ -10,12 +10,11 @@ const CustomizeInput = (props) => {
         color: "black !important",
         "-webkit-text-fill-color": "black !important",
         borderColor: "black !important",
-        borderRadius: "10px !important"
+        borderRadius: "10px !important",
       },
       "& .Mui-disabled .MuiOutlinedInput-notchedOutline": {
         borderColor: "black !important",
-        borderRadius: "10px !important"
-
+        borderRadius: "10px !important",
       },
     },
   });
@@ -27,7 +26,8 @@ const CustomizeInput = (props) => {
         <TextField
           disabled
           multiline
-          id="outlined-basic"
+          fullWidth
+          // id="outlined-basic"
           size="small"
           variant="outlined"
           className={classes.customDisable}
@@ -39,7 +39,9 @@ const CustomizeInput = (props) => {
         />
       ) : (
         <TextField
-          id="outlined-basic"
+          multiline
+          fullWidth
+          // id="outlined-basic"
           size="small"
           variant="outlined"
           defaultValue={props.defaultValue}

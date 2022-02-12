@@ -1,6 +1,11 @@
 /*
  * This is for global css usage.
  */
+@import "styles/color.scss";
+
+ html{
+   background-color: $bg;
+ }
 
  *,
  *::after,

@@ -13,6 +13,7 @@ import Alert from "../../component/Alert";
 
 const GoalDetailPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [editmode, setEditmode] = React.useState(false);
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
@@ -33,7 +34,7 @@ const GoalDetailPage = () => {
   });
   const classes = useStyles();
 
-  const [selectedValue, setSelectedValue] = React.useState("a");
+  const [selectedValue, setSelectedValue] = React.useState("");
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
     console.log(selectedValue);
@@ -50,15 +51,15 @@ const GoalDetailPage = () => {
     <div className={styles.container}>
       <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
       <div>
-      <div className={styles.top}>
-        <CustomizeButton
-          status="back"
-          mr=""
-          click={() => {
-            navigate(path.goallistpage);
-          }}
-        />
-        <CustomizeProfile name="淯宣" />
+        <div className={styles.top}>
+          <CustomizeButton
+            status="back"
+            mr=""
+            click={() => {
+              navigate(path.goallistpage);
+            }}
+          />
+          <CustomizeProfile name="淯宣" />
         </div>
         <div className={styles.buttons}>
           {!editmode ? (
@@ -68,7 +69,11 @@ const GoalDetailPage = () => {
                 title="編輯"
                 mr="0"
                 click={() => {
-                  navigate(path.editgoalpage);
+                  navigate(path.editgoalpage, {
+                    state: {
+                      lastpath: location.pathname,
+                    },
+                  });
                 }}
               />
               <CustomizeButton
@@ -112,7 +117,11 @@ const GoalDetailPage = () => {
             title="規劃進度"
             mr=""
             click={() => {
-              navigate(path.plangoalpage);
+              navigate(path.plangoalpage,{
+                state: {
+                  lastpath: location.pathname,
+                },
+              });
             }}
           /> */}
         </div>
@@ -147,7 +156,7 @@ const GoalDetailPage = () => {
                   multiline
                   id="standard-basic"
                   variant="standard"
-                  defaultValue="和老師約"
+                  defaultValue="和老師約和老師約和老師約和老師約"
                   className={classes.time}
                 />
                 <div className={styles.finish_status}>
@@ -171,7 +180,7 @@ const GoalDetailPage = () => {
                     onChange={handleChange}
                     value="O"
                     name="radio-buttons"
-                    inputProps={{ "aria-label": "X" }}
+                    inputProps={{ "aria-label": "O" }}
                   />
                   <Radio
                     style={{ display: "none" }}
@@ -184,6 +193,7 @@ const GoalDetailPage = () => {
                   />
                 </div>
               </div>
+
             </div>
           )}
         </div>

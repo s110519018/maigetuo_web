@@ -10,6 +10,7 @@ import Alert from "../../component/Alert";
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
 
@@ -31,7 +32,11 @@ const GoalListPage = () => {
             status="outlined"
             mr="0"
             click={() => {
-              navigate(path.addgoalpage);
+              navigate(path.addgoalpage, {
+                state: {
+                  lastpath: location.pathname,
+                }
+              });
             }}
           />
         </div>
@@ -49,13 +54,17 @@ const GoalListPage = () => {
             <div className={styles.title}>架構圖規劃</div>
             <div className={styles.date} >2022/02/26</div>
             <CustomizeProgress value={34}/>
-            <div className={styles.user}>
+            {/* <div className={styles.user}>
               <div>
                 <CustomizeButton
                   title="編輯"
                   status="outlined"
                   click={(event) => {
-                    navigate(path.editgoalpage);
+                    navigate(path.editgoalpage, {
+                      state: {
+                        lastpath: location.pathname,
+                      }
+                    });
                     event.stopPropagation();
                   }}
                 />
@@ -76,16 +85,17 @@ const GoalListPage = () => {
                   event.stopPropagation();
                 }}
               />
-            </div>
-            {/* <div className={styles.parter}>
+            </div> */}
+            <div className={styles.parter}>
               <CustomizeButton
                 title="規劃進度"
                 status="contained"
-                click={() => {
-                  console.log("rr");
+                click={(event) => {
+                  navigate(path.plangoalpage);
+                  event.stopPropagation();
                 }}
               />
-            </div> */}
+            </div>
           </div>
           
         </div>

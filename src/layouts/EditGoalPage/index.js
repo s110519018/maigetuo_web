@@ -106,7 +106,12 @@ const EditGoalPage = () => {
             title="取消"
             status="outlined"
             click={() => {
-              navigate(-1);
+              if(location.state===null){
+                liff.closeWindow();
+              }
+              else{
+                navigate(-1);
+              }
             }}
           />
         </div>

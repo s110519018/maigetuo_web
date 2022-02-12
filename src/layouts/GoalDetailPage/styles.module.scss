@@ -4,13 +4,17 @@
 
 .container {
   @include container;
+  @include mobile {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 .container > div {
   //   border: 1px solid black;
   @include divsetting;
-  min-width: 300px;
+  // min-width: 300px;
 }
-.top{
+.top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,33 +43,40 @@
   border: 1px solid $goal-timeline;
   border-radius: 5px;
 }
-.edit{
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
   background-color: $goal-timeline;
   border-radius: 5px;
   padding: 24px 16px;
 }
-.time{
+.time {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  @include mobile {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 5px;
+  }
 }
-.finish_status{
-    display: flex;
-    justify-content: space-around;
-    gap: 4px;
+.finish_status {
+  display: flex;
+  justify-content: space-around;
+  gap: 4px;
 }
-label{
-    font-weight: bold;
-    text-align: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 26px;
-    cursor: pointer;
+label {
+  font-weight: bold;
+  text-align: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 26px;
+  cursor: pointer;
 }
-.label_click{
-    background-color: $finish_status-bg;
+.label_click {
+  background-color: $finish_status-bg;
 }
