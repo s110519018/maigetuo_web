@@ -26,12 +26,16 @@
 }
 .status {
   padding: 4px 8px;
-  background-color: #c4c4c4;
+  background-color: $color-highlight;
+  color: #1F8695;
   @include content;
   margin-right: 8px;
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
+}
+.status_select{
+  color: $color-white;
 }
 
 .goal_bar {
@@ -45,14 +49,15 @@
   padding: 4px;
   background-color: $namebg;
   border-radius: $PersonIcon-border-radius;
+  color: $color-white;
   @include content;
 }
 .month {
   align-self: flex-start;
   border-radius: $PersonIcon-border-radius;
-  border: 1px solid black;
+  border: 1px solid $goal-border;
   background: #fff;
-  color: black;
+  color: $color-main;
   padding: 4px 16px;
   @include content;
 }
@@ -63,6 +68,7 @@
   padding: 12px 20px;
   width: 100%;
   background-color: $goalbg;
+  border: 2px solid $goal-border;
   border-radius: $card-border-radius;
   cursor: pointer;
 }

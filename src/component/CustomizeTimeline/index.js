@@ -10,10 +10,15 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 export default function CustomizeTimeline() {
   const useStyles = makeStyles({
     linecolor: {
-      backgroundColor: "#948D8D !important",
+      backgroundColor: "#08415c !important",
     },
     dotcolor: {
-      backgroundColor: "#948D8D !important",
+      backgroundColor: "#fff !important",
+      border: "1px solid #08415c !important"
+    },
+    dot_finish_color: {
+      backgroundColor: "#08415c !important",
+      border: "none"
     },
     minheight: {
       minHeight: "20px !important",
@@ -28,7 +33,7 @@ export default function CustomizeTimeline() {
           09:30 am
         </TimelineOppositeContent>
         <TimelineSeparator>
-          <TimelineDot className={classes.dotcolor}/>
+          <TimelineDot className={classes.dot_finish_color}/>
           <TimelineConnector className={classes.linecolor} />
         </TimelineSeparator>
         <TimelineContent>Eat</TimelineContent>

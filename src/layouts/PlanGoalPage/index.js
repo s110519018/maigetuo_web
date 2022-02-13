@@ -2,8 +2,10 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as QueryString from "query-string";
+import liff from "@line/liff";
 import styles from "./styles.module.scss";
 import path from "../../utils/path";
+import Logo_little from "../../assets/image/logo_little.png";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
@@ -79,29 +81,35 @@ const PlanGoalPage = () => {
         fullWidth={true}
       >
         <div className={styles.addmodal}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDatePicker
-              mask="____/__/__"
-              label="Date mobile"
-              inputFormat="yyyy/MM/dd"
-              value={addDate}
-              onChange={addDateChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  label=""
-                  variant="standard"
-                />
-              )}
+          <div className={styles.adddate}>
+            日期
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <MobileDatePicker
+                mask="____/__/__"
+                label="Date mobile"
+                inputFormat="yyyy/MM/dd"
+                value={addDate}
+                onChange={addDateChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    label=""
+                    variant="standard"
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          </div>
+          <div className={styles.addcontent}>
+            內容
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="請輸入進度描述"
+              variant="standard"
             />
-          </LocalizationProvider>
-          <TextField
-            fullWidth
-            size="small"
-            defaultValue="你好你好dddd你好你好你好"
-            variant="standard"
-          />
+          </div>
           <button className={styles.addbtn}>新增</button>
           <button
             className={styles.cancelbtn}
@@ -138,7 +146,7 @@ const PlanGoalPage = () => {
           />
           <div className={styles.plan}>
             <div className={styles.plantitle}>
-              <CalendarTodayIcon fontSize="small" />
+              <CalendarTodayIcon fontSize="small" sx={{ color: "#08415C" }}/>
               進度規劃
             </div>
             <div
@@ -187,6 +195,28 @@ const PlanGoalPage = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className={styles.plantip}>
+          <img src={Logo_little} alt="Logo" />
+          <div className={styles.tipscontent}>
+            不要因為進度落後就擅自延後唷！
+            <br />
+            想想看如何安排時間加快進度吧~
+          </div>
+        </div>
+        <div className={styles.buttons}>
+          <CustomizeButton title="儲存" status="outlined" />
+          <CustomizeButton
+            title="取消"
+            status="outlined"
+            click={() => {
+              if (location.state === null) {
+                liff.closeWindow();
+              } else {
+                navigate(-1);
+              }
+            }}
+          />
         </div>
       </div>
     </div>

@@ -7,18 +7,18 @@ const CustomizeButton = (props) => {
   const status = props.status;
   const useStyles = makeStyles({
     contained: {
-      background: "#9E9B9B !important",
+      background: "#08415C !important",
       borderRadius: "10px !important",
       boxShadow: "none !important",
-      color: "black !important",
+      color: "white !important",
       padding: "4px 16px !important",
     },
     outlined: {
       background: "#fff !important",
-      border: "1px solid black !important",
+      border: "1px solid #08415C !important",
       borderRadius: "10px !important",
       boxShadow: "none !important",
-      color: "black !important",
+      color: "#08415C !important",
       padding: "4px 16px !important",
     },
   });

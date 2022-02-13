@@ -7,9 +7,9 @@ const CustomizeInput = (props) => {
   const useStyles = makeStyles({
     customDisable: {
       "& .MuiInputBase-input.Mui-disabled": {
-        color: "black !important",
-        "-webkit-text-fill-color": "black !important",
-        borderColor: "black !important",
+        color: "#08415C !important",
+        "-webkit-text-fill-color": "#08415C !important",
+        borderColor: "#08415C !important",
         borderRadius: "10px !important",
       },
       "& .Mui-disabled .MuiOutlinedInput-notchedOutline": {
@@ -17,8 +17,16 @@ const CustomizeInput = (props) => {
         borderRadius: "10px !important",
       },
     },
+    root: {
+      "& .MuiFilledInput-root": {
+        background: "#E5E5E5",
+        borderRadius: "50px",
+        padding:"12px"
+      }
+    }
   });
   const classes = useStyles();
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>{props.title}</div>
@@ -41,9 +49,11 @@ const CustomizeInput = (props) => {
         <TextField
           multiline
           fullWidth
+          className={classes.root}
+          InputProps={{ disableUnderline: true }}
           // id="outlined-basic"
           size="small"
-          variant="outlined"
+          variant="filled"
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
           onChange={(e) => {

@@ -13,11 +13,11 @@ const CustomizeProgress = (props) => {
     height: "20px !important",
     borderRadius: "15px !important",
     [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: "#ECEBEB"
+      backgroundColor: "#DDDBF1",
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: "15px !important",
-      backgroundColor: "#9E9B9B"
+      backgroundColor: "#8F77BD",
     },
   }));
 
@@ -41,7 +41,11 @@ const CustomizeProgress = (props) => {
             transform: "translateX(-50%) translateY(-50%)",
           }}
         >
-          {props.value}%
+          {value * 2 === 100 ? (
+            <Fragment>完成</Fragment>
+          ) : (
+            <Fragment>{props.value}%</Fragment>
+          )}
         </Typography>
       </div>
     </Box>

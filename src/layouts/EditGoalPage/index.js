@@ -97,19 +97,15 @@ const EditGoalPage = () => {
         <CustomizeDatepicker title="截止日期" onChangeDate={onChangeDate} />
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
-          <CustomizeButton
-            title="儲存"
-            status="outlined"
-            click={sendMessage}
-          />
+          <CustomizeButton title="儲存" status="outlined" click={sendMessage} />
+          <CustomizeButton title="刪除" status="outlined" click={sendMessage} />
           <CustomizeButton
             title="取消"
             status="outlined"
             click={() => {
-              if(location.state===null){
+              if (location.state === null) {
                 liff.closeWindow();
-              }
-              else{
+              } else {
                 navigate(-1);
               }
             }}

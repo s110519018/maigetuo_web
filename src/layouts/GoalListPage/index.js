@@ -6,7 +6,7 @@ import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProgress from "../../component/CustomizeProgress";
 import Alert from "../../component/Alert";
 
-//https://stackoverflow.com/questions/44890663/how-do-i-sort-and-display-a-react-array-by-year-and-month 
+//https://stackoverflow.com/questions/44890663/how-do-i-sort-and-display-a-react-array-by-year-and-month
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
@@ -29,31 +29,35 @@ const GoalListPage = () => {
         <div className={styles.top}>
           <CustomizeButton
             title="新增任務"
-            status="outlined"
+            status="contained"
             mr="0"
             click={() => {
               navigate(path.addgoalpage, {
                 state: {
                   lastpath: location.pathname,
-                }
+                },
               });
             }}
           />
         </div>
         <div className={styles.status_bar}>
-          <div className={styles.status}>全部</div>
+          <div className={`${styles.status} ${styles.status_select}`}>全部</div>
           <div className={styles.status}>已完成</div>
           <div className={styles.status}>未完成</div>
         </div>
 
         <div className={styles.goal_bar}>
-          
           <div className={styles.month}>本月任務</div>
-          <div className={styles.goal} onClick={()=>{navigate(path.goaldetailpage)}}>
+          <div
+            className={styles.goal}
+            onClick={() => {
+              navigate(path.goaldetailpage);
+            }}
+          >
             <div className={styles.name}>育萱</div>
             <div className={styles.title}>架構圖規劃</div>
-            <div className={styles.date} >2022/02/26</div>
-            <CustomizeProgress value={34}/>
+            <div className={styles.date}>2022/02/26</div>
+            <CustomizeProgress value={60} />
             {/* <div className={styles.user}>
               <div>
                 <CustomizeButton
@@ -91,13 +95,16 @@ const GoalListPage = () => {
                 title="規劃進度"
                 status="contained"
                 click={(event) => {
-                  navigate(path.plangoalpage);
+                  navigate(path.plangoalpage, {
+                    state: {
+                      lastpath: location.pathname,
+                    },
+                  });
                   event.stopPropagation();
                 }}
               />
             </div>
           </div>
-          
         </div>
       </div>
     </div>
