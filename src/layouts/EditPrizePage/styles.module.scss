@@ -1,0 +1,30 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+.container {
+  @include container;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.buttons {
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 32px;
+  @include mobile {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 20px;
+  }
+}
+img {
+  width: 100%;
+  margin-bottom: 32px;
+}

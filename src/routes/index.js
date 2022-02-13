@@ -7,6 +7,10 @@ import GoalListPage from "../layouts/GoalListPage";
 import GoalDetailPage from "../layouts/GoalDetailPage";
 import PlanGoalPage from "../layouts/PlanGoalPage";
 import EditGoalPage from "../layouts/EditGoalPage";
+import PrizeListPage from "../layouts/PrizeListPage";
+import AddPrizePage from "../layouts/AddPrizePage";
+import EditPrizePage from "../layouts/EditPrizePage";
+
 
 const WebRoutes = () => {
   useEffect(() => {
@@ -20,6 +24,9 @@ const WebRoutes = () => {
         <Route path={path.goaldetailpage} element={<GoalDetailPage />} />
         <Route path={path.plangoalpage} element={<PlanGoalPage />} />
         <Route path={path.editgoalpage} element={<EditGoalPage />} />
+        <Route path={path.prizelistpage} element={<PrizeListPage />} />
+        <Route path={path.addprizepage} element={<AddPrizePage />} />
+        <Route path={path.editprizepage} element={<EditPrizePage />} />
       </Routes>
     </Router>
   );

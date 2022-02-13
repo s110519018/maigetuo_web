@@ -1,0 +1,96 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+.container {
+  @include container;
+}
+
+.container > div {
+  // border: 1px solid black;
+  @include divsetting;
+}
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.status_bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.status {
+  padding: 4px 8px;
+  background-color: $color-highlight;
+  color: #1F8695;
+  @include content;
+  margin-right: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.status_select{
+  color: $color-white;
+}
+
+.goal_bar {
+  display: flex;
+  flex-direction: column;
+}
+.goal_bar > div {
+  margin: $card-spacing 0px;
+}
+.name {
+  padding: 4px;
+  background-color: $namebg;
+  border-radius: $PersonIcon-border-radius;
+  color: $color-white;
+  @include content;
+}
+.month {
+  align-self: flex-start;
+  border-radius: $PersonIcon-border-radius;
+  border: 1px solid $goal-border;
+  background: #fff;
+  color: $color-main;
+  padding: 4px 16px;
+  @include content;
+}
+.goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 20px;
+  width: 100%;
+  background-color: $goalbg;
+  border: 2px solid $goal-border;
+  border-radius: $card-border-radius;
+  cursor: pointer;
+}
+.goal > div {
+  margin: 8px 0 0 8px;
+}
+.title {
+  @include title_regular;
+}
+.date {
+  @include content;
+}
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user > div {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 8px;
+}

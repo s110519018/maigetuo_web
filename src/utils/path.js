@@ -5,4 +5,7 @@ export default {
     goaldetailpage: '/goaldetailpage',
     plangoalpage: '/plangoalpage',
     editgoalpage: '/editgoalpage',
+    prizelistpage: '/prizelistpage',
+    addprizepage: '/addprizepage',
+    editprizepage: '/editprizepage',
 };
