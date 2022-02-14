@@ -61,7 +61,7 @@
   padding: 8px;
   @include mobile {
     display: flex;
-    background-color: $finish_status-bg;
+    background-color: $color-input;
     border-radius: 5px;
   }
 }

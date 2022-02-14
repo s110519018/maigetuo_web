@@ -10,6 +10,7 @@
   margin-top: 16px;
   @include mobile {
     flex-wrap: wrap;
+    gap: 12px;
   }
 }
 

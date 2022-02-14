@@ -8,4 +8,5 @@ export default {
     prizelistpage: '/prizelistpage',
     addprizepage: '/addprizepage',
     editprizepage: '/editprizepage',
+    prizedetailpage: '/prizedetailpage',
 };

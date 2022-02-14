@@ -10,6 +10,7 @@ import EditGoalPage from "../layouts/EditGoalPage";
 import PrizeListPage from "../layouts/PrizeListPage";
 import AddPrizePage from "../layouts/AddPrizePage";
 import EditPrizePage from "../layouts/EditPrizePage";
+import PrizeDetailPage from "../layouts/PrizeDetailPage";
 
 
 const WebRoutes = () => {
@@ -27,6 +28,7 @@ const WebRoutes = () => {
         <Route path={path.prizelistpage} element={<PrizeListPage />} />
         <Route path={path.addprizepage} element={<AddPrizePage />} />
         <Route path={path.editprizepage} element={<EditPrizePage />} />
+        <Route path={path.prizedetailpage} element={<PrizeDetailPage />} />
       </Routes>
     </Router>
   );

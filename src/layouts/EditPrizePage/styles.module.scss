@@ -3,6 +3,10 @@
 @import "../../styles/font.scss";
 .container {
   @include container;
+  @include mobile {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 .top {
   display: flex;
@@ -26,5 +30,109 @@
 }
 img {
   width: 100%;
+  max-width: 400px;
   margin-bottom: 32px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.reach {
+  display: flex;
+  align-items: center;
+  @include mobile {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+.reach_title {
+  @include sencond-title;
+  margin-right: 24px;
+  white-space: nowrap;
+  @include mobile {
+    margin-right: 8px;
+  }
+}
+.reach_goals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.reach_goal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  @include mobile {
+    flex-wrap: wrap;
+  }
+}
+.goal_selecter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  @include content;
+  width: 70%;
+  min-width: 100px;
+  max-width: 200px;
+  height: 30px;
+  background-color: $color-input;
+  border-radius: 50px;
+  padding: 8px 12px;
+  @include mobile {
+    width: 100%;
+    max-width: 100%;
+  }
+  div {
+    width: calc(100% - 40px);
+    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.detail {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  textarea {
+    background-color: $color-input;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+    height: 300px;
+    padding: 8px;
+  }
+  textarea::-webkit-input-placeholder {
+    color: #9A9A9A;
+  }
+
+  textarea:-moz-placeholder {
+    /* Firefox 18- */
+    color: #9A9A9A;
+  }
+
+  textarea::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #9A9A9A;
+  }
+
+  textarea:-ms-input-placeholder {
+    color: #9A9A9A;
+  }
+
+  textarea::placeholder {
+    color: #9A9A9A;
+  }
+}
+.detail_title {
+  @include sencond-title;
+  margin-right: 24px;
+  white-space: nowrap;
+  @include mobile {
+    margin-right: 8px;
+  }
 }

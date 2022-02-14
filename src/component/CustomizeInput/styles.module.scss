@@ -9,6 +9,7 @@
   align-items: center;
   @include mobile {
     flex-wrap: wrap;
+    gap: 12px;
   }
 }
 

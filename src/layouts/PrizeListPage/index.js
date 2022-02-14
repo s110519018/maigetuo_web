@@ -51,7 +51,7 @@ const PrizeListPage = () => {
           <div
             className={styles.goal}
             onClick={() => {
-              navigate(path.goaldetailpage);
+              navigate(path.prizedetailpage);
             }}
           >
             <div className={styles.title}>蝦皮免運下單商品</div>
