@@ -1,0 +1,63 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+
+.container {
+  @include container;
+  @include mobile {
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+.container > div {
+  //   border: 1px solid black;
+  @include divsetting;
+  // min-width: 300px;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px; //換行間距
+}
+.sharecard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 16px;
+  background-color: $goal-detail-bg;
+  border-radius: 5px;
+  padding: 16px 12px;
+  border: 2px solid $goal-border;
+}
+.sharecard_title {
+  @include title_bold;
+  text-align: center;
+}
+.sharecard_category {
+  min-width: 100%;
+  background-color: $color-highlight;
+  border-radius: 5px;
+  padding: 4px 12px;
+  color: $color-white;
+  @include sencond-title;
+  text-align: center;
+}
+.sharecard_content {
+  min-width: 100%;
+  background-color: $color-white;
+  border-radius: 5px;
+  padding: 20px;
+  @include content;
+  min-height: 300px;
+}

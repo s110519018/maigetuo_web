@@ -29,7 +29,7 @@
   flex-wrap: wrap;
   gap: 12px; //換行間距
 }
-.goal {
+.prize {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -39,45 +39,59 @@
   border-radius: 5px;
   padding: 16px 12px;
 }
-.timeline {
-  border: 1px solid $goal-timeline;
-  border-radius: 5px;
-}
-.edit {
+.reach {
   display: flex;
-  flex-direction: column;
-  gap: 28px;
-  border: 1px solid $goal-timeline;
-  border-radius: 5px;
-  padding: 24px 16px;
-}
-.time {
-  display: flex;
-  justify-content: space-around;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
   @include mobile {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-radius: 5px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }
-.finish_status {
+.reach_title {
+  @include sencond-title;
+  margin-right: 24px;
+  white-space: nowrap;
+  @include mobile {
+    margin-right: 8px;
+  }
+}
+.reach_goals {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  gap: 8px;
+  width: 90%;
+}
+.comment_part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
+  img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 0;
+  }
+  .comment{
+    background: $color-highlight;
+    border-radius: 30px;
+    @include content;
+    padding: 8px;
+    color: $color-white;
+  }
 }
-label {
-  font-weight: bold;
-  text-align: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 26px;
-  cursor: pointer;
-}
-.label_click {
-  background-color: $finish_status-bg;
-  color: $color-white;
+.detail {
+  border-radius: 5px;
+  min-height: 200px;
+  background-color: $color-white;
+  padding: 20px;
+  @include content;
 }

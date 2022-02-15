@@ -3,6 +3,10 @@
 @import "../../styles/font.scss";
 .container {
   @include container;
+  @include mobile {
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 .top {
   display: flex;

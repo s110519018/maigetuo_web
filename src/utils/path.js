@@ -9,4 +9,8 @@ export default {
     addprizepage: '/addprizepage',
     editprizepage: '/editprizepage',
     prizedetailpage: '/prizedetailpage',
+    sharecardlistpage: '/sharecardlistpage',
+    sharecarddetailpage: '/sharecarddetailpage',
+    addsharecardpage: '/addsharecardpage',
+    editsharecardpage: '/editsharecardpage',
 };

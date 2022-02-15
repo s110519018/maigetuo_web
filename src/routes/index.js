@@ -11,7 +11,10 @@ import PrizeListPage from "../layouts/PrizeListPage";
 import AddPrizePage from "../layouts/AddPrizePage";
 import EditPrizePage from "../layouts/EditPrizePage";
 import PrizeDetailPage from "../layouts/PrizeDetailPage";
-
+import SharecardListPage from "../layouts/SharecardListPage";
+import SharecardDetailPage from "../layouts/SharecardDetailPage";
+import AddSharecardPage from "../layouts/AddSharecardPage";
+import EditSharecardPage from "../layouts/EditSharecardPage";
 
 const WebRoutes = () => {
   useEffect(() => {
@@ -29,6 +32,10 @@ const WebRoutes = () => {
         <Route path={path.addprizepage} element={<AddPrizePage />} />
         <Route path={path.editprizepage} element={<EditPrizePage />} />
         <Route path={path.prizedetailpage} element={<PrizeDetailPage />} />
+        <Route path={path.sharecardlistpage} element={<SharecardListPage />} />
+        <Route path={path.sharecarddetailpage} element={<SharecardDetailPage />} />
+        <Route path={path.addsharecardpage} element={<AddSharecardPage />} />
+        <Route path={path.editsharecardpage} element={<EditSharecardPage />} />
       </Routes>
     </Router>
   );

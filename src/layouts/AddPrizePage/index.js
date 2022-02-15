@@ -11,11 +11,16 @@ import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProfile from "../../component/CustomizeProfile";
 import { TextField } from "@mui/material";
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
 //https://medium.com/frochu/%E5%9C%A8react-app%E4%B8%AD%E6%9C%80%E7%82%BA%E5%B8%B8%E8%A6%8B%E7%9A%84%E8%B7%A8%E7%AB%99%E6%94%BB%E6%93%8A%E6%BC%8F%E6%B4%9E-2fdd95f08466
 // XSS 跨站攻擊
+// text=replace(text,"/n","<br>")
+// text=replace(text," ","&nbsp;") 
+// text=replace(text,"<script>","") 
+// text=replace(text,"</script>","") 
+// https://www.796t.com/post/NWc5eHc=.html
 const AddPrizePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,7 +95,21 @@ const AddPrizePage = () => {
         }}
         fullWidth={true}
       >
-        <div className={styles.addmodal}>addmodal</div>
+        <div className={styles.selectmodal}>
+          <div className={styles.modal_title}>選擇任務</div>
+          <div className={styles.modal_content}>
+            <div className={styles.category}>咖啡咖啡廳咖啡廳廳咖啡咖啡廳咖啡廳廳咖啡咖啡廳咖啡廳廳</div>
+            <hr/>
+          </div>
+          <button
+            className={styles.cancelbtn}
+            onClick={() => {
+              setReachOpen(false);
+            }}
+          >
+            取消
+          </button>
+        </div>
       </Dialog>
       <div>
         <img src={Logo} alt="Logo" />
@@ -122,7 +141,7 @@ const AddPrizePage = () => {
                   }}
                 >
                   <div>垃圾</div>
-                  <ArrowDropDownOutlinedIcon/>
+                  <ArrowDropDownOutlinedIcon />
                 </div>
               </div>
               <div className={styles.reach_goal}>
@@ -133,16 +152,17 @@ const AddPrizePage = () => {
                     setReachOpen(true);
                   }}
                 >
-                  <div>垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾</div>
-                  <ArrowDropDownOutlinedIcon/>
+                  <div>
+                    垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾
+                  </div>
+                  <ArrowDropDownOutlinedIcon />
                 </div>
               </div>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detail_title}>詳細內容</div>
-            <textarea placeholder="請輸入獎勵詳細內容">
-            </textarea>
+            <textarea placeholder="請輸入獎勵詳細內容"></textarea>
           </div>
         </div>
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}

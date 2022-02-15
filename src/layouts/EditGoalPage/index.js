@@ -98,7 +98,6 @@ const EditGoalPage = () => {
         {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
         <div className={styles.buttons}>
           <CustomizeButton title="儲存" status="outlined" click={sendMessage} />
-          <CustomizeButton title="刪除" status="outlined" click={sendMessage} />
           <CustomizeButton
             title="取消"
             status="outlined"
