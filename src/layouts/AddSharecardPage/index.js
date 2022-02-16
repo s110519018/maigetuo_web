@@ -98,9 +98,9 @@ const AddSharecardPage = () => {
           <div className={styles.modal_title}>
             選擇分類
             <SettingsIcon
-              sx={{ color: "#08415c",cursor:"pointer" }}
+              sx={{ color: "#08415c", cursor: "pointer" }}
               onClick={() => {
-                console.log("dddd");
+                navigate(path.sharecardcategorypage);
               }}
             />
           </div>

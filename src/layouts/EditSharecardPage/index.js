@@ -100,7 +100,7 @@ const EditSharecardPage = () => {
             <SettingsIcon
               sx={{ color: "#08415c",cursor:"pointer" }}
               onClick={() => {
-                console.log("dddd");
+                navigate(path.sharecardcategorypage);
               }}
             />
           </div>
