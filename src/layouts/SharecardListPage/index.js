@@ -34,7 +34,7 @@ const SharecardListPage = () => {
         fullWidth={true}
       >
         <div className={styles.selectmodal}>
-          <div className={styles.modal_title}>選擇類別</div>
+          <div className={styles.modal_title}>篩選類別</div>
           <div className={styles.modal_content}>
             <div className={styles.category}>
               咖啡咖啡廳

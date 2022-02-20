@@ -1,16 +1,51 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import * as QueryString from "query-string";
 import styles from "./styles.module.scss";
 import path from "../../utils/path";
 import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProgress from "../../component/CustomizeProgress";
 import Alert from "../../component/Alert";
 
+//Store
+import { StoreContext } from "../../Store/reducer";
+import { getGoalsList, setBaseData, } from "../../Store/actions";
+
 //https://stackoverflow.com/questions/44890663/how-do-i-sort-and-display-a-react-array-by-year-and-month
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  //資料內容
+  const {
+    state: {
+      baseData: {
+        group_id,
+        user_id,
+      },
+      goalsData: {
+        goals,
+        goalsDataLoading,
+        error,
+      },
+    },
+    dispatch
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    //看一下要不要存到local
+    if(group_id===""){
+      const { groupID,userID } = QueryString.parse(location.search);
+      setBaseData(dispatch, { group_id: groupID,user_id:userID })
+    }
+  }, []);
+  useEffect(() => {
+    if(group_id!==""){
+      getGoalsList(dispatch, { group_id: group_id });
+    }
+  }, [group_id]);
+
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
 
