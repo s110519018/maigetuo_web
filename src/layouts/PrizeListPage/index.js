@@ -47,7 +47,6 @@ const PrizeListPage = () => {
         </div>
 
         <div className={styles.goal_bar}>
-          <div className={styles.month}>本月獎勵</div>
           <div
             className={styles.goal}
             onClick={() => {

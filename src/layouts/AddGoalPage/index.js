@@ -34,7 +34,8 @@ const AddGoalPage = () => {
       .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
       .then(() => {
         if (!liff.isLoggedIn()) {
-          liff.login({}); // 第一次一定要登入
+          // liff.login({}); // 第一次一定要登入
+          alert("請在line上操作唷!")
         } else if (liff.isInClient()) {
           // LIFFので動いているのであれば
           liff

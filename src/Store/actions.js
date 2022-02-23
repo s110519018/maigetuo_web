@@ -18,7 +18,6 @@ export const setBaseData = async (dispatch, options) => {
 export const getGoalsList = async (dispatch, options) => {
   dispatch({ type: GOALS_DATA_REQUEST });
   const { group_id } = options;
-  console.log(group_id);
   try {
     const { data } = await axios.get(SERVER_URL + "/goals/?groupid="+group_id);
     dispatch({
