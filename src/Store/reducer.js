@@ -25,7 +25,7 @@ const initialState = {
   },
   goalsData: {
     goals: [],
-    goalsDataLoading: false,
+    goalsDataLoading: true,
     error: "",
   },
   goalData: {

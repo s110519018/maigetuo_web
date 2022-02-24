@@ -98,6 +98,7 @@ const GoalListPage = () => {
     });
   }, []);
   useEffect(() => {
+    // console.log("group_id: "+group_id);
     if (group_id !== "") {
       getGoalsList(dispatch, { group_id: group_id });
       if (member_id === "") {
@@ -121,7 +122,7 @@ const GoalListPage = () => {
 
   return (
     <Fragment>
-      {goalsDataLoading && datasDataLoading ? (
+      {goalsDataLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>

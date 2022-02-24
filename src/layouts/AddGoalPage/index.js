@@ -203,7 +203,7 @@ const AddGoalPage = () => {
                   navigate(path.goallistpage);
                 }}
               />
-              <CustomizeProfile name="淯宣" />
+              <CustomizeProfile name={member_name} />
             </div>
             <CustomizeInput
               title="任務名稱"
