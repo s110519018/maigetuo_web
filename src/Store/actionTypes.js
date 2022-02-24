@@ -3,7 +3,7 @@ export const SET_BASE_DATA = 'SET_BASE_DATA';
 export const MEMBER_DATA_REQUEST = 'MEMBER_DATA_REQUEST';
 export const SET_MEMBER_DATA = 'SET_MEMBER_DATA';
 export const MEMBER_DATA_FAIL = 'MEMBER_DATA_FAIL';
-//目標
+//目標載入
 export const GOALS_DATA_REQUEST = 'GOALS_DATA_REQUEST';
 export const SET_GOALS_DATA = 'SET_GOALS_DATA';
 export const GOALS_DATA_FAIL = 'GOALS_DATA_FAIL';

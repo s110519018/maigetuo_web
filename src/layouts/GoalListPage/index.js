@@ -19,7 +19,18 @@ const GoalListPage = () => {
   const location = useLocation();
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
+  const [Errorshow, setErrorshow] = React.useState(false);
+  const [Errortext, setErrortext] = React.useState("");
+  const [Alertshow, setAlertshow] = React.useState(false);
+  const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
 
+  const handleClickOpen = () => {
+    setAlertshow(true);
+  };
+
+  const handleClose = () => {
+    setAlertshow(false);
+  };
   //資料內容
   const {
     state: {
@@ -30,7 +41,7 @@ const GoalListPage = () => {
         member_id,
         member_name,
         datasDataLoading,
-        datas_error
+        datas_error,
       },
       goalsData: { goals, goalsDataLoading, error },
     },
@@ -41,7 +52,6 @@ const GoalListPage = () => {
     var { groupID } = QueryString.parse(location.search);
     var userID = "";
     var userName = "";
-    // console.log("[]")
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
       if (!liff.isLoggedIn() || liff.getOS() === "web") {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
@@ -90,28 +100,40 @@ const GoalListPage = () => {
   useEffect(() => {
     if (group_id !== "") {
       getGoalsList(dispatch, { group_id: group_id });
-      getGroupData(dispatch, { group_id: group_id, user_id: user_id });
+      if (member_id === "") {
+        getGroupData(dispatch, { group_id: group_id, user_id: user_id });
+      }
     }
   }, [group_id]);
-
-  const [Alertshow, setAlertshow] = React.useState(false);
-  const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
-
-  const handleClickOpen = () => {
-    setAlertshow(true);
-  };
-
-  const handleClose = () => {
-    setAlertshow(false);
-  };
+  //錯誤區
+  useEffect(() => {
+    if (datas_error !== "") {
+      setErrorshow(true);
+      setErrortext(datas_error);
+    }
+  }, [datas_error]);
+  useEffect(() => {
+    if (error !== "") {
+      setErrorshow(true);
+      setErrortext(error);
+    }
+  }, [error]);
 
   return (
     <Fragment>
-      {goalsDataLoading&&datasDataLoading ? (
+      {goalsDataLoading && datasDataLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>
           <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+            }}
+            text={Errortext}
+          />
           <div>
             <div className={styles.top}>
               <CustomizeButton
