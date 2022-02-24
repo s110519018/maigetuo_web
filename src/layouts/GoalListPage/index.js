@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as QueryString from "query-string";
+import liff from "@line/liff";
 import styles from "./styles.module.scss";
 import path from "../../utils/path";
 import CustomizeButton from "../../component/CustomizeButton";
@@ -10,34 +11,86 @@ import Loading from "../../component/Loading";
 
 //Store
 import { StoreContext } from "../../Store/reducer";
-import { getGoalsList, setBaseData } from "../../Store/actions";
+import { getGroupData, getGoalsList, setBaseData } from "../../Store/actions";
 
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentMonth = new Date().getMonth()+1;
+  const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
 
   //資料內容
   const {
     state: {
-      baseData: { group_id, user_id },
+      baseData: {
+        group_id,
+        user_id,
+        user_name,
+        member_id,
+        member_name,
+        datasDataLoading,
+        datas_error
+      },
       goalsData: { goals, goalsDataLoading, error },
     },
     dispatch,
   } = useContext(StoreContext);
 
   useEffect(() => {
-    //看一下要不要存到local
-    if (group_id === "") {
-      const { groupID, userID } = QueryString.parse(location.search);
-      setBaseData(dispatch, { group_id: groupID, user_id: userID });
-    }
+    var { groupID } = QueryString.parse(location.search);
+    var userID = "";
+    var userName = "";
+    // console.log("[]")
+    liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
+      if (!liff.isLoggedIn() || liff.getOS() === "web") {
+        userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
+        userName = "阿呆";
+        if (groupID === "" || groupID === undefined) {
+          groupID = localStorage.getItem("group_id");
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        } else {
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        }
+      } else if (liff.isInClient()) {
+        liff
+          .getProfile()
+          .then((profile) => {
+            userID = profile.userId;
+            userName = profile.displayName;
+            if (groupID === "" || groupID === undefined) {
+              groupID = localStorage.getItem("group_id");
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            } else {
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            }
+          })
+          .catch(function (error) {
+            window.alert("Error sending message: " + error);
+          });
+      }
+    });
   }, []);
   useEffect(() => {
     if (group_id !== "") {
       getGoalsList(dispatch, { group_id: group_id });
+      getGroupData(dispatch, { group_id: group_id, user_id: user_id });
     }
   }, [group_id]);
 
@@ -54,7 +107,7 @@ const GoalListPage = () => {
 
   return (
     <Fragment>
-      {goalsDataLoading ? (
+      {goalsDataLoading&&datasDataLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>
@@ -83,11 +136,13 @@ const GoalListPage = () => {
             </div>
 
             <div className={styles.goal_bar}>
-              <div className={styles.month}>即將到期</div>
               {goals
                 .filter((goal) => {
-                  var [year, month,day] = goal.deadline.split("/");
-                  return currentMonth === +month && currentYear == year;
+                  var [year, month, day] = goal.deadline.split("/");
+                  return (
+                    (currentMonth === +month || currentMonth > +month) &&
+                    currentYear == year
+                  );
                 })
                 .sort(
                   (a, b) =>
@@ -102,7 +157,9 @@ const GoalListPage = () => {
                       navigate(path.goaldetailpage);
                     }}
                   >
-                    <div className={styles.name}>{goal.user_id}</div>
+                    <div className={styles.name}>
+                      {goal.user_id === user_id ? user_name : member_name}
+                    </div>
                     <div className={styles.title}>{goal.title}</div>
                     <div className={styles.date}>{goal.deadline}</div>
                     <CustomizeProgress value={60} />
@@ -157,12 +214,15 @@ const GoalListPage = () => {
                     )}
                   </div>
                 ))}
-                <div className={styles.hr} />
-              <div className={styles.month}>尚未到期</div>
+              <div className={styles.hr} />
               {goals
                 .filter((goal) => {
-                  var [year, month,day] = goal.deadline.split("/");
-                  return currentMonth !== +month && currentYear !== year;
+                  var [year, month, day] = goal.deadline.split("/");
+                  return (
+                    currentMonth !== +month &&
+                    currentMonth < +month &&
+                    currentYear !== year
+                  );
                 })
                 .sort(
                   (a, b) =>
@@ -177,7 +237,9 @@ const GoalListPage = () => {
                       navigate(path.goaldetailpage);
                     }}
                   >
-                    <div className={styles.name}>{goal.user_id}</div>
+                    <div className={styles.name}>
+                      {goal.user_id === user_id ? user_name : member_name}
+                    </div>
                     <div className={styles.title}>{goal.title}</div>
                     <div className={styles.date}>{goal.deadline}</div>
                     <CustomizeProgress value={60} />

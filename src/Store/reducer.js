@@ -2,6 +2,9 @@ import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 import {
   SET_BASE_DATA,
+  MEMBER_DATA_REQUEST,
+  SET_MEMBER_DATA,
+  MEMBER_DATA_FAIL,
   GOALS_DATA_REQUEST,
   SET_GOALS_DATA,
   GOALS_DATA_FAIL,
@@ -14,6 +17,11 @@ const initialState = {
   baseData: {
     group_id: "",
     user_id: "",
+    user_name: "",
+    member_id: "",
+    member_name: "",
+    datasDataLoading: false,
+    datas_error: "",
   },
   goalsData: {
     goals: [],
@@ -38,10 +46,43 @@ function reducer(state, action) {
       return {
         ...state,
         baseData: {
+          ...state.baseData,
           group_id: action.payload.group_id,
           user_id: action.payload.user_id,
+          user_name: action.payload.user_name,
         },
       };
+
+    case MEMBER_DATA_REQUEST:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          datas_error: "",
+          datasDataLoading: true,
+        },
+      };
+    case SET_MEMBER_DATA:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          member_id: action.payload.userId,
+          member_name: action.payload.displayName,
+          datas_error: "",
+          datasDataLoading: false,
+        },
+      };
+    case MEMBER_DATA_FAIL:
+      return {
+        ...state,
+        baseData: {
+          ...state.baseData,
+          datas_error: action.payload,
+          datasDataLoading: false,
+        },
+      };
+
     case GOALS_DATA_REQUEST:
       return {
         ...state,
