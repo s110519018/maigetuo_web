@@ -1,3 +1,4 @@
+export const RESET_ERROR_DATA = 'RESET_ERROR_DATA';
 //基本資料設定
 export const SET_BASE_DATA = 'SET_BASE_DATA';
 export const MEMBER_DATA_REQUEST = 'MEMBER_DATA_REQUEST';
@@ -7,3 +8,15 @@ export const MEMBER_DATA_FAIL = 'MEMBER_DATA_FAIL';
 export const GOALS_DATA_REQUEST = 'GOALS_DATA_REQUEST';
 export const SET_GOALS_DATA = 'SET_GOALS_DATA';
 export const GOALS_DATA_FAIL = 'GOALS_DATA_FAIL';
+//單一目標載入
+export const GOAL_DATA_REQUEST = 'GOAL_DATA_REQUEST';
+export const SET_GOAL_DATA = 'SET_GOAL_DATA';
+export const GOAL_DATA_FAIL = 'GOAL_DATA_FAIL';
+//編輯目標
+export const EDIT_GOAL_REQUEST = 'EDIT_GOAL_REQUEST';
+export const EDIT_GOAL_DATA = 'EDIT_GOAL_DATA';
+export const EDIT_GOAL_FAIL = 'EDIT_GOAL_FAIL';
+//刪除目標
+export const DELETE_GOAL_REQUEST = 'DELETE_GOAL_REQUEST';
+export const DELETE_GOAL_DATA = 'DELETE_GOAL_DATA';
+export const DELETE_GOAL_FAIL = 'DELETE_GOAL_FAIL';

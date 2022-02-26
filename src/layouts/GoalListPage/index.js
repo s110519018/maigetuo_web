@@ -11,25 +11,42 @@ import Loading from "../../component/Loading";
 
 //Store
 import { StoreContext } from "../../Store/reducer";
-import { getGroupData, getGoalsList, setBaseData } from "../../Store/actions";
+import {
+  resetErrorData,
+  getGroupData,
+  getGoalsList,
+  deleteGoalData,
+  setBaseData,
+} from "../../Store/actions";
 
 //案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-  const [Errorshow, setErrorshow] = React.useState(false);
-  const [Errortext, setErrortext] = React.useState("");
-  const [Alertshow, setAlertshow] = React.useState(false);
-  const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
+  // const currentMonth = new Date().getMonth() + 1;
+  // const currentYear = new Date().getFullYear();
+  const [Errorshow, setErrorshow] = useState(false);
+  const [Errortext, setErrortext] = useState("");
+  const [Alertshow, setAlertshow] = useState(false);
+  const [deleteID, setdeleteID] = useState("");
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (ID) => {
     setAlertshow(true);
+    setdeleteID(ID);
   };
 
-  const handleClose = () => {
+  const handleSubmit = () => {
     setAlertshow(false);
+    const delete_finish = deleteGoalData(dispatch, {
+      group_id: group_id,
+      goal_id: deleteID,
+    });
+    delete_finish.then(function (result) {
+      console.log(result);
+      if (result) {
+        navigate(path.goallistpage);
+      }
+    });
   };
   //資料內容
   const {
@@ -41,9 +58,10 @@ const GoalListPage = () => {
         member_id,
         member_name,
         datasDataLoading,
-        datas_error,
       },
-      goalsData: { goals, goalsDataLoading, error },
+      deleteGoal: { deleteGoalLoading },
+      goalsData: { goals, goalsDataLoading },
+      error,
     },
     dispatch,
   } = useContext(StoreContext);
@@ -57,7 +75,7 @@ const GoalListPage = () => {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
         userName = "阿呆";
         if (groupID === "" || groupID === undefined) {
-          groupID = localStorage.getItem("group_id");
+          groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {
             group_id: groupID,
             user_id: userID,
@@ -77,7 +95,7 @@ const GoalListPage = () => {
             userID = profile.userId;
             userName = profile.displayName;
             if (groupID === "" || groupID === undefined) {
-              groupID = localStorage.getItem("group_id");
+              groupID = sessionStorage.getItem("group_id");
               setBaseData(dispatch, {
                 group_id: groupID,
                 user_id: userID,
@@ -92,10 +110,12 @@ const GoalListPage = () => {
             }
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            setErrorshow(true);
+            setErrortext("發生錯誤，訊息：" + error);
           });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     // console.log("group_id: "+group_id);
@@ -105,33 +125,35 @@ const GoalListPage = () => {
         getGroupData(dispatch, { group_id: group_id, user_id: user_id });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group_id]);
   //錯誤區
-  useEffect(() => {
-    if (datas_error !== "") {
-      setErrorshow(true);
-      setErrortext(datas_error);
-    }
-  }, [datas_error]);
   useEffect(() => {
     if (error !== "") {
       setErrorshow(true);
       setErrortext(error);
     }
   }, [error]);
-
   return (
     <Fragment>
-      {goalsDataLoading ? (
+      {goalsDataLoading || deleteGoalLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>
-          <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
+          <Alert
+            open={Alertshow}
+            handleClose={() => {
+              setAlertshow(false);
+            }}
+            handleSubmit={handleSubmit}
+            text="確定要刪除嗎？"
+          />
           <Alert
             status="error"
             open={Errorshow}
             handleClose={() => {
               setErrorshow(false);
+              resetErrorData(dispatch);
             }}
             text={Errortext}
           />
@@ -160,13 +182,6 @@ const GoalListPage = () => {
 
             <div className={styles.goal_bar}>
               {goals
-                .filter((goal) => {
-                  var [year, month, day] = goal.deadline.split("/");
-                  return (
-                    (currentMonth === +month || currentMonth > +month) &&
-                    currentYear == year
-                  );
-                })
                 .sort(
                   (a, b) =>
                     new Date(...a.deadline.split("/")) -
@@ -177,7 +192,11 @@ const GoalListPage = () => {
                     key={"goal" + goal._id}
                     className={styles.goal}
                     onClick={() => {
-                      navigate(path.goaldetailpage);
+                      navigate(path.goaldetailpage, {
+                        state: {
+                          goal: goal,
+                        },
+                      });
                     }}
                   >
                     <div className={styles.name}>
@@ -196,6 +215,7 @@ const GoalListPage = () => {
                               navigate(path.editgoalpage, {
                                 state: {
                                   lastpath: location.pathname,
+                                  goal: goal,
                                 },
                               });
                               event.stopPropagation();
@@ -205,7 +225,7 @@ const GoalListPage = () => {
                             title="刪除"
                             status="outlined"
                             click={(event) => {
-                              handleClickOpen();
+                              handleClickOpen(goal._id);
                               event.stopPropagation();
                             }}
                           />
@@ -214,87 +234,11 @@ const GoalListPage = () => {
                           title="更新進度"
                           status="contained"
                           click={(event) => {
-                            navigate(path.goaldetailpage);
-                            event.stopPropagation();
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <div className={styles.parter}>
-                        <CustomizeButton
-                          title="規劃進度"
-                          status="contained"
-                          click={(event) => {
-                            navigate(path.plangoalpage, {
+                            navigate(path.goaldetailpage, {
                               state: {
-                                lastpath: location.pathname,
+                                goal: goal,
                               },
                             });
-                            event.stopPropagation();
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              <div className={styles.hr} />
-              {goals
-                .filter((goal) => {
-                  var [year, month, day] = goal.deadline.split("/");
-                  return (
-                    currentMonth !== +month &&
-                    currentMonth < +month &&
-                    currentYear !== year
-                  );
-                })
-                .sort(
-                  (a, b) =>
-                    new Date(...a.deadline.split("/")) -
-                    new Date(...b.deadline.split("/"))
-                )
-                .map((goal, index) => (
-                  <div
-                    key={"goal" + goal._id}
-                    className={styles.goal}
-                    onClick={() => {
-                      navigate(path.goaldetailpage);
-                    }}
-                  >
-                    <div className={styles.name}>
-                      {goal.user_id === user_id ? user_name : member_name}
-                    </div>
-                    <div className={styles.title}>{goal.title}</div>
-                    <div className={styles.date}>{goal.deadline}</div>
-                    <CustomizeProgress value={60} />
-                    {user_id === goal.user_id ? (
-                      <div className={styles.user}>
-                        <div>
-                          <CustomizeButton
-                            title="編輯"
-                            status="outlined"
-                            click={(event) => {
-                              navigate(path.editgoalpage, {
-                                state: {
-                                  lastpath: location.pathname,
-                                },
-                              });
-                              event.stopPropagation();
-                            }}
-                          />
-                          <CustomizeButton
-                            title="刪除"
-                            status="outlined"
-                            click={(event) => {
-                              handleClickOpen();
-                              event.stopPropagation();
-                            }}
-                          />
-                        </div>
-                        <CustomizeButton
-                          title="更新進度"
-                          status="contained"
-                          click={(event) => {
-                            navigate(path.goaldetailpage);
                             event.stopPropagation();
                           }}
                         />

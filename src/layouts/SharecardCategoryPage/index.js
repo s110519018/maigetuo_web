@@ -31,6 +31,9 @@ const SharecardCategoryPage = () => {
         handleClose={() => {
           setAlertshow(false);
         }}
+        handleSubmit={() => {
+          setAlertshow(false);
+        }}
         text={Alerttext}
       />
       {/* 開啟選單 */}

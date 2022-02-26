@@ -66,7 +66,7 @@ const Alert = (props) => {
               取消
             </Button>
             <Button
-              onClick={props.handleClose}
+              onClick={props.handleSubmit}
               autoFocus
               className={classes.button}
             >

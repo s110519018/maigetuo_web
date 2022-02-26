@@ -24,7 +24,14 @@ const SharecardListPage = () => {
 
   return (
     <div className={styles.container}>
-      <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
+      <Alert
+        open={Alertshow}
+        handleClose={handleClose}
+        handleSubmit={() => {
+          setAlertshow(false);
+        }}
+        text={Alerttext}
+      />
       {/* 選擇類別 */}
       <Dialog
         open={opencategory}
@@ -36,9 +43,7 @@ const SharecardListPage = () => {
         <div className={styles.selectmodal}>
           <div className={styles.modal_title}>篩選類別</div>
           <div className={styles.modal_content}>
-            <div className={styles.category}>
-              咖啡咖啡廳
-            </div>
+            <div className={styles.category}>咖啡咖啡廳</div>
           </div>
           <button
             className={styles.cancelbtn}

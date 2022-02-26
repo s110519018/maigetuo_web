@@ -49,7 +49,14 @@ const SharecardDetailPage = () => {
   };
   return (
     <div className={styles.container}>
-      <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
+      <Alert
+        open={Alertshow}
+        handleClose={handleClose}
+        handleSubmit={() => {
+          setAlertshow(false);
+        }}
+        text={Alerttext}
+      />
       <div>
         <div className={styles.top}>
           <CustomizeButton
@@ -82,7 +89,9 @@ const SharecardDetailPage = () => {
         </div>
         <div className={styles.sharecard}>
           <div className={styles.sharecard_title}>架構圖規劃</div>
-          <div className={styles.sharecard_category}>架構圖規劃架構圖規劃架構圖規劃</div>
+          <div className={styles.sharecard_category}>
+            架構圖規劃架構圖規劃架構圖規劃
+          </div>
           <div className={styles.sharecard_content}>架構圖規劃</div>
         </div>
       </div>

@@ -16,7 +16,7 @@ import Loading from "../../component/Loading";
 
 //Store
 import { StoreContext } from "../../Store/reducer";
-import { getGroupData, setBaseData } from "../../Store/actions";
+import { getGroupData, setBaseData, resetErrorData } from "../../Store/actions";
 
 //https://dev.to/yutagoto/react-typescript-liff-1kpk
 const AddGoalPage = () => {
@@ -44,11 +44,13 @@ const AddGoalPage = () => {
         member_id,
         member_name,
         datasDataLoading,
-        datas_error,
       },
+      error,
     },
     dispatch,
   } = useContext(StoreContext);
+
+  //日期格式
   const formatDate = (date) => {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -60,58 +62,52 @@ const AddGoalPage = () => {
 
     return [year, month, day].join("/");
   };
+
   //寄送訊息
   const sendMessage = () => {
-    liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          // liff.login({}); // 第一次一定要登入
-          setErrorshow(true);
-          setErrortext("請在line群組中操作唷!");
-          console.log(
-            "我要新增任務: [" + name + "] (" + formatDate(datepick).toString() + ")"
-          );
-        } else if (liff.isInClient()) {
-          // LIFFので動いているのであれば
-          liff
-            .sendMessages([
-              {
-                // 發送訊息
-                type: "text",
-                text:
-                  "我要新增任務: [" + name + "] (" + formatDate(datepick).toString() + ")",
-              },
-            ])
-            .then(function () {
-              liff.closeWindow();
-            })
-            .catch(function (error) {
-              setErrorshow(true);
-              setErrortext("失敗" + error);
-            });
-        }
-      });
-  };
-
-  /* 追加: Alert顯示UserProfile */
-  const getUserInfo = () => {
-    liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
-      if (!liff.isLoggedIn()) {
-        // liff.login({});
-      } else if (liff.isInClient()) {
-        liff
-          .getProfile() // ユーザ情報を取得する
-          .then((profile) => {
-            const userId = profile.userId;
-            const displayName = profile.displayName;
-            alert(`Name: ${displayName}, userId: ${userId}`);
-          })
-          .catch(function (error) {
-            window.alert("Error sending message: " + error);
-          });
-      }
-    });
+    if (name === "") {
+      setErrorshow(true);
+      setErrortext("請輸入任務名稱!");
+    } else {
+      liff
+        .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            // liff.login({}); // 第一次一定要登入
+            setErrorshow(true);
+            setErrortext("請在line群組中操作唷!");
+            console.log(
+              "我要新增任務: [" +
+                name +
+                "] (" +
+                formatDate(datepick).toString() +
+                ")"
+            );
+          } else if (liff.isInClient()) {
+            // LIFFので動いているのであれば
+            liff
+              .sendMessages([
+                {
+                  // 發送訊息
+                  type: "text",
+                  text:
+                    "我要新增任務: [" +
+                    name +
+                    "] (" +
+                    formatDate(datepick).toString() +
+                    ")",
+                },
+              ])
+              .then(function () {
+                liff.closeWindow();
+              })
+              .catch(function (error) {
+                setErrorshow(true);
+                setErrortext("失敗" + error);
+              });
+          }
+        });
+    }
   };
 
   useEffect(() => {
@@ -123,7 +119,7 @@ const AddGoalPage = () => {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
         userName = "阿呆";
         if (groupID === "" || groupID === undefined) {
-          groupID = localStorage.getItem("group_id");
+          groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {
             group_id: groupID,
             user_id: userID,
@@ -143,7 +139,7 @@ const AddGoalPage = () => {
             userID = profile.userId;
             userName = profile.displayName;
             if (groupID === "" || groupID === undefined) {
-              groupID = localStorage.getItem("group_id");
+              groupID = sessionStorage.getItem("group_id");
               setBaseData(dispatch, {
                 group_id: groupID,
                 user_id: userID,
@@ -158,10 +154,12 @@ const AddGoalPage = () => {
             }
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            setErrorshow(true);
+            setErrortext("發生錯誤，訊息：" + error);
           });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (group_id !== "") {
@@ -170,14 +168,15 @@ const AddGoalPage = () => {
         getGroupData(dispatch, { group_id: group_id, user_id: user_id });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group_id]);
   //錯誤區
   useEffect(() => {
-    if (datas_error !== "") {
+    if (error !== "") {
       setErrorshow(true);
-      setErrortext(datas_error);
+      setErrortext(error);
     }
-  }, [datas_error]);
+  }, [error]);
 
   return (
     <Fragment>
@@ -190,6 +189,7 @@ const AddGoalPage = () => {
             open={Errorshow}
             handleClose={() => {
               setErrorshow(false);
+              resetErrorData(dispatch);
             }}
             text={Errortext}
           />
@@ -203,7 +203,7 @@ const AddGoalPage = () => {
                   navigate(path.goallistpage);
                 }}
               />
-              <CustomizeProfile name={member_name} />
+              <CustomizeProfile name={user_name} />
             </div>
             <CustomizeInput
               title="任務名稱"

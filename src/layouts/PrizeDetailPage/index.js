@@ -61,7 +61,7 @@ const PrizeDetailPage = () => {
   };
   return (
     <div className={styles.container}>
-      <Alert open={Alertshow} handleClose={handleClose} text={Alerttext} />
+      <Alert open={Alertshow} handleClose={handleClose} handleSubmit={handleClose} text={Alerttext} />
       <div>
         <div className={styles.top}>
           <CustomizeButton

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment,useState,useEffect } from "react";
 import styles from "./styles.module.scss";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import TextField from "@mui/material/TextField";
@@ -7,8 +7,14 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { makeStyles } from "@material-ui/styles";
 
 const CustomizeDatepicker = (props) => {
-  const [value, setValue] = React.useState(new Date());
+  const [value, setValue] = useState(new Date());
 
+  useEffect(() => {
+    if(props.defaultValue !== undefined){
+      setValue(props.defaultValue);
+    }
+  }, [props.defaultValue]);
+  
   const handleChange = (newValue) => {
     setValue(newValue);
     props.onChangeDate(value);
