@@ -38,6 +38,9 @@ const EditGoalPage = () => {
   const [datepick, setDate] = useState("");
   const onChangeDate = (value) => {
     setDate(value);
+    setGoal({...Goal, 
+      deadline: value,
+    });
     // console.log(datepick.toString());
   };
   //資料內容
@@ -173,7 +176,7 @@ const EditGoalPage = () => {
   }, [goalData]);
 
   useEffect(() => {
-    console.log(datepick);
+    console.log("datepick"+datepick);
   }, [datepick]);
 
   //錯誤區
