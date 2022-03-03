@@ -22,6 +22,7 @@ import {
   deleteGoalData,
   getGroupData,
   setBaseData,
+  updateGoalData,
 } from "../../Store/actions";
 
 const GoalDetailPage = () => {
@@ -52,10 +53,11 @@ const GoalDetailPage = () => {
         user_name,
         member_id,
         // member_name,
-        // datasDataLoading,
+        datasDataLoading,
       },
       deleteGoal: { deleteGoalLoading },
       goalData: { goalDataLoading },
+      updateGoal: { updateGoalLoading },
       goalData,
       error,
     },
@@ -65,12 +67,39 @@ const GoalDetailPage = () => {
   const [Alertshow, setAlertshow] = useState(false);
   const [Errorshow, setErrorshow] = useState(false);
   const [Errortext, setErrortext] = useState("");
+  //因為location近來的mission渲染有時間差，所以還是必須加個loading
+  const [missionsLoading, setmissionsLoading] = useState(true);
   const [Goal, setGoal] = useState({});
 
-  const [selectedValue, setSelectedValue] = useState("");
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    console.log(selectedValue);
+  //因為更新進度畫面不重新渲染，所以多宣告一個test變數每次修改就setTest(!test)讓畫面重新改變
+  const [test, setTest] = useState(false);
+  const handleStatusChange = (id, event) => {
+    try {
+      var origin_Goal = Goal;
+      origin_Goal.missions.forEach((element) => {
+        if (element._id === id) {
+          element.status = event.target.value;
+        }
+      });
+      setGoal(origin_Goal);
+      setTest(!test);
+    } catch (error) {
+      setErrorshow(true);
+      setErrortext("選擇完成狀時態出現問題!");
+    }
+  };
+  const save = () => {
+      const finish = updateGoalData(dispatch, {
+        group_id: group_id,
+        goal_id: Goal._id,
+        missions: Goal.missions,
+      });
+      finish.then(function (result) {
+        // console.log(result);
+        if (result) {
+          setEditmode(false);
+        }
+      });
   };
 
   const handleClickOpen = () => {
@@ -164,7 +193,12 @@ const GoalDetailPage = () => {
       setGoal(goalData.goal);
     }
   }, [goalData]);
-
+  useEffect(() => {
+    if (Goal.missions !== undefined) {
+      // console.log(Goal);
+      setmissionsLoading(false);
+    }
+  }, [Goal]);
   //錯誤區
   useEffect(() => {
     if (error !== "") {
@@ -175,7 +209,11 @@ const GoalDetailPage = () => {
 
   return (
     <Fragment>
-      {goalDataLoading || deleteGoalLoading ? (
+      {goalDataLoading ||
+      deleteGoalLoading ||
+      datasDataLoading ||
+      missionsLoading ||
+      updateGoalLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>
@@ -246,9 +284,7 @@ const GoalDetailPage = () => {
                         status="contained"
                         title="更新"
                         mr="0"
-                        click={() => {
-                          console.log("更新");
-                        }}
+                        click={save}
                       />
                       <CustomizeButton
                         status="contained"
@@ -270,6 +306,7 @@ const GoalDetailPage = () => {
                     navigate(path.plangoalpage, {
                       state: {
                         lastpath: location.pathname,
+                        goal: Goal,
                       },
                     });
                   }}
@@ -289,65 +326,86 @@ const GoalDetailPage = () => {
               />
               {!editmode ? (
                 <div className={styles.timeline}>
-                  <CustomizeTimeline />
+                  <CustomizeTimeline missions={Goal.missions} />
                 </div>
               ) : (
                 <div className={styles.edit}>
-                  <div className={styles.time}>
-                    <TextField
-                      disabled
-                      multiline
-                      id="standard-basic"
-                      variant="standard"
-                      defaultValue="2022/12/31"
-                      className={classes.time}
-                    />
-                    <TextField
-                      disabled
-                      multiline
-                      id="standard-basic"
-                      variant="standard"
-                      defaultValue="和老師約和老師約和老師約和老師約"
-                      className={classes.time}
-                    />
-                    <div className={styles.finish_status}>
-                      {/* 到時候改成該進度的狀態 */}
-                      <label
-                        htmlFor="O"
-                        className={
-                          selectedValue === "O" ? styles.label_click : ""
-                        }
-                      >
-                        O
-                      </label>
-                      <label
-                        htmlFor="X"
-                        className={
-                          selectedValue === "X" ? styles.label_click : ""
-                        }
-                      >
-                        X
-                      </label>
-                      <Radio
-                        style={{ display: "none" }}
-                        id="O"
-                        checked={selectedValue === "O"}
-                        onChange={handleChange}
-                        value="O"
-                        name="radio-buttons"
-                        inputProps={{ "aria-label": "O" }}
-                      />
-                      <Radio
-                        style={{ display: "none" }}
-                        id="X"
-                        checked={selectedValue === "X"}
-                        onChange={handleChange}
-                        value="X"
-                        name="radio-buttons"
-                        inputProps={{ "aria-label": "X" }}
-                      />
-                    </div>
-                  </div>
+                  {Goal.missions.length === 0 ? (
+                    <div className={styles.empty}>目前無任務</div>
+                  ) : (
+                    <Fragment>
+                      {Goal.missions
+                        .sort(
+                          (a, b) =>
+                            new Date(...a.deadline.split("/")) -
+                            new Date(...b.deadline.split("/"))
+                        )
+                        .map((mission) => (
+                          <div className={styles.time}>
+                            <TextField
+                              disabled
+                              multiline
+                              id="standard-basic"
+                              variant="standard"
+                              defaultValue={mission.deadline}
+                              className={classes.time}
+                            />
+                            <TextField
+                              disabled
+                              multiline
+                              id="standard-basic"
+                              variant="standard"
+                              defaultValue={mission.title}
+                              className={classes.time}
+                            />
+                            <div className={styles.finish_status}>
+                              <label
+                                htmlFor={"O" + mission._id}
+                                className={
+                                  mission.status === "O"
+                                    ? styles.label_click
+                                    : ""
+                                }
+                              >
+                                O
+                              </label>
+                              <label
+                                htmlFor={"X" + mission._id}
+                                className={
+                                  mission.status === "X"
+                                    ? styles.label_click
+                                    : ""
+                                }
+                              >
+                                X
+                              </label>
+                              <Radio
+                                style={{ display: "none" }}
+                                id={"O" + mission._id}
+                                checked={mission.status === "O"}
+                                onChange={(event) => {
+                                  handleStatusChange(mission._id, event);
+                                }}
+                                value="O"
+                                name="radio-buttons"
+                                inputProps={{ "aria-label": "O" + mission._id }}
+                              />
+                              <Radio
+                                style={{ display: "none" }}
+                                id={"X" + mission._id}
+                                checked={mission.status === "X"}
+                                onChange={(event) => {
+                                  handleStatusChange(mission._id, event);
+                                }}
+                                value="X"
+                                name="radio-buttons"
+                                inputProps={{ "aria-label": "X" + mission._id }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                    </Fragment>
+                  )}
                 </div>
               )}
             </div>

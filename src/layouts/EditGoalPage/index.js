@@ -27,9 +27,11 @@ import {
 const EditGoalPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [Errorshow, setErrorshow] = useState(false);
+  //因為location近來的Goal.user_id渲染有時間差，所以還是必須加個loading
+  const [GoalUserIDLoading, setGoalUserIDLoading] = useState(true);
   const [Errortext, setErrortext] = useState("");
   const [Goal, setGoal] = useState({});
+  const [Errorshow, setErrorshow] = useState(false);
 
   const [name, setName] = useState("");
   const onChangeContent = (value) => {
@@ -38,9 +40,7 @@ const EditGoalPage = () => {
   const [datepick, setDate] = useState("");
   const onChangeDate = (value) => {
     setDate(value);
-    setGoal({...Goal, 
-      deadline: value,
-    });
+    setGoal({ ...Goal, deadline: value });
     // console.log(datepick.toString());
   };
   //資料內容
@@ -76,23 +76,29 @@ const EditGoalPage = () => {
   };
 
   const save = () => {
-    if (name === "") {
-      setErrorshow(true);
-      setErrortext("請輸入任務名稱!");
-    } else {
-      const finish = editGoalData(dispatch, {
-        group_id: group_id,
-        goal_id: Goal._id,
-        title: name,
-        deadline: formatDate(datepick),
-      });
+    try {
+      if (name === "") {
+        throw "請輸入任務名稱!";
+      } else if (name.length > 20) {
+        throw "字數過長，請低於20字";
+      } else {
+        const finish = editGoalData(dispatch, {
+          group_id: group_id,
+          goal_id: Goal._id,
+          title: name,
+          deadline: formatDate(datepick),
+        });
 
-      finish.then(function (result) {
-        // console.log(result);
-        if (result) {
-          navigate(path.goaldetailpage);
-        }
-      });
+        finish.then(function (result) {
+          // console.log(result);
+          if (result) {
+            navigate(path.goaldetailpage);
+          }
+        });
+      }
+    } catch (error) {
+      setErrorshow(true);
+      setErrortext(error);
     }
   };
 
@@ -104,7 +110,7 @@ const EditGoalPage = () => {
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
       if (!liff.isLoggedIn() || liff.getOS() === "web") {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
-        userName = "阿呆";
+        userName = "小米";
         if (groupID === "" || groupID === undefined) {
           groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {
@@ -173,10 +179,17 @@ const EditGoalPage = () => {
       setName(goalData.goal.title);
       setDate(goalData.goal.deadline);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goalData]);
 
   useEffect(() => {
-    console.log("datepick"+datepick);
+    if (Goal.user_id !== undefined) {
+      setGoalUserIDLoading(false);
+    }
+  }, [Goal]);
+
+  useEffect(() => {
+    console.log("datepick" + datepick);
   }, [datepick]);
 
   //錯誤區
@@ -189,8 +202,34 @@ const EditGoalPage = () => {
 
   return (
     <Fragment>
-      {editGoalLoading || editGoalLoading ? (
+      {editGoalLoading || goalDataLoading || datasDataLoading || GoalUserIDLoading ? (
         <Loading />
+      ) : user_id !== Goal.user_id ? (
+        <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
+          <div>
+            <img src={Logo} alt="Logo" />
+            <div className={styles.top}>
+              <CustomizeButton
+                title="任務清單"
+                status="contained"
+                click={() => {
+                  navigate(path.goallistpage);
+                }}
+              />
+              <CustomizeProfile name={user_name} />
+            </div>
+            <div>您非該任務的所有者，<br/>只可協助規劃進度無法編輯任務及更新進度</div>
+          </div>
+        </div>
       ) : (
         <div className={styles.container}>
           <Alert

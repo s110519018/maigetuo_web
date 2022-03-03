@@ -42,7 +42,7 @@ const AddGoalPage = () => {
         user_id,
         user_name,
         member_id,
-        member_name,
+        // member_name,
         datasDataLoading,
       },
       error,
@@ -68,6 +68,9 @@ const AddGoalPage = () => {
     if (name === "") {
       setErrorshow(true);
       setErrortext("請輸入任務名稱!");
+    } else if (name.length > 20) {
+      setErrorshow(true);
+      setErrortext("字數過長，請低於20字!");
     } else {
       liff
         .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
@@ -111,6 +114,7 @@ const AddGoalPage = () => {
   };
 
   useEffect(() => {
+    resetErrorData(dispatch);
     var { groupID } = QueryString.parse(location.search);
     var userID = "";
     var userName = "";

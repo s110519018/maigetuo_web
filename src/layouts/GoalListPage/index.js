@@ -19,12 +19,9 @@ import {
   setBaseData,
 } from "../../Store/actions";
 
-//案月份排序
 const GoalListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const currentMonth = new Date().getMonth() + 1;
-  // const currentYear = new Date().getFullYear();
   const [Errorshow, setErrorshow] = useState(false);
   const [Errortext, setErrortext] = useState("");
   const [Alertshow, setAlertshow] = useState(false);
@@ -136,7 +133,7 @@ const GoalListPage = () => {
   }, [error]);
   return (
     <Fragment>
-      {goalsDataLoading || deleteGoalLoading ? (
+      {goalsDataLoading || deleteGoalLoading || datasDataLoading ? (
         <Loading />
       ) : (
         <div className={styles.container}>
@@ -172,13 +169,13 @@ const GoalListPage = () => {
                 }}
               />
             </div>
-            <div className={styles.status_bar}>
+            {/* <div className={styles.status_bar}>
               <div className={`${styles.status} ${styles.status_select}`}>
                 全部
               </div>
               <div className={styles.status}>已完成</div>
               <div className={styles.status}>未完成</div>
-            </div>
+            </div> */}
 
             <div className={styles.goal_bar}>
               {goals
@@ -204,7 +201,7 @@ const GoalListPage = () => {
                     </div>
                     <div className={styles.title}>{goal.title}</div>
                     <div className={styles.date}>{goal.deadline}</div>
-                    <CustomizeProgress value={60} />
+                    <CustomizeProgress value={30} missions={goal.missions} late={new Date(goal.deadline)<new Date()} />
                     {user_id === goal.user_id ? (
                       <div className={styles.user}>
                         <div>
@@ -252,6 +249,7 @@ const GoalListPage = () => {
                             navigate(path.plangoalpage, {
                               state: {
                                 lastpath: location.pathname,
+                                goal: goal,
                               },
                             });
                             event.stopPropagation();

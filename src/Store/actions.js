@@ -17,6 +17,12 @@ import {
   DELETE_GOAL_REQUEST,
   DELETE_GOAL_DATA,
   DELETE_GOAL_FAIL,
+  PLAN_GOAL_REQUEST,
+  PLAN_GOAL_DATA,
+  PLAN_GOAL_FAIL,
+  UPDATE_GOAL_REQUEST,
+  UPDATE_GOAL_DATA,
+  UPDATE_GOAL_FAIL,
 } from "./actionTypes";
 
 const SERVER_URL = "https://maigetuo.herokuapp.com/api";
@@ -131,6 +137,46 @@ export const deleteGoalData = async (dispatch, options) => {
     return true;
   } catch (error) {
     dispatch({ type: DELETE_GOAL_FAIL, payload: "刪除時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const planGoalData = async (dispatch, options) => {
+  dispatch({ type: PLAN_GOAL_REQUEST });
+  const { group_id, goal_id, missions } = options;
+  try {
+    const { data } = await axios.put(SERVER_URL + "/goals/planmissions/" + goal_id, {
+      group_id: group_id,
+      missions: missions,
+    });
+    dispatch({
+      type: PLAN_GOAL_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: PLAN_GOAL_FAIL, payload: "在上傳規劃進度內容時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const updateGoalData = async (dispatch, options) => {
+  dispatch({ type: UPDATE_GOAL_REQUEST });
+  const { group_id, goal_id, missions } = options;
+  try {
+    const { data } = await axios.put(SERVER_URL + "/goals/updatemissions/" + goal_id, {
+      group_id: group_id,
+      missions: missions,
+    });
+    dispatch({
+      type: UPDATE_GOAL_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: UPDATE_GOAL_FAIL, payload: "在更新進度時發生問題" });
     console.log(error);
     return false;
   }

@@ -18,6 +18,12 @@ import {
   DELETE_GOAL_REQUEST,
   DELETE_GOAL_DATA,
   DELETE_GOAL_FAIL,
+  PLAN_GOAL_REQUEST,
+  PLAN_GOAL_DATA,
+  PLAN_GOAL_FAIL,
+  UPDATE_GOAL_REQUEST,
+  UPDATE_GOAL_DATA,
+  UPDATE_GOAL_FAIL,
 } from "./actionTypes";
 
 export const StoreContext = createContext();
@@ -45,6 +51,12 @@ const initialState = {
   },
   deleteGoal: {
     deleteGoalLoading: false,
+  },
+  planGoal: {
+    planGoalLoading: false,
+  },
+  updateGoal: {
+    updateGoalLoading: false,
   },
   error: "",
 };
@@ -91,7 +103,7 @@ function reducer(state, action) {
         ...state,
         baseData: {
           ...state.baseData,
-          
+
           datasDataLoading: false,
         },
         error: action.payload,
@@ -221,6 +233,74 @@ function reducer(state, action) {
         deleteGoal: {
           ...state.deleteGoal,
           deleteGoalLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //規劃進度
+    case PLAN_GOAL_REQUEST:
+      return {
+        ...state,
+        planGoal: {
+          ...state.planGoal,
+          planGoalLoading: true,
+        },
+        error: "",
+      };
+    case PLAN_GOAL_DATA:
+      return {
+        ...state,
+        goalData: {
+          ...state.goalData,
+          goal: action.payload,
+          goalDataLoading: false,
+        },
+        planGoal: {
+          ...state.planGoal,
+          planGoalLoading: false,
+        },
+        error: "",
+      };
+    case PLAN_GOAL_FAIL:
+      return {
+        ...state,
+        planGoal: {
+          ...state.planGoal,
+          goalDataLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //更新進度
+    case UPDATE_GOAL_REQUEST:
+      return {
+        ...state,
+        updateGoal: {
+          ...state.updateGoal,
+          updateGoalLoading: true,
+        },
+        error: "",
+      };
+    case UPDATE_GOAL_DATA:
+      return {
+        ...state,
+        goalData: {
+          ...state.goalData,
+          goal: action.payload,
+          goalDataLoading: false,
+        },
+        updateGoal: {
+          ...state.updateGoal,
+          updateGoalLoading: false,
+        },
+        error: "",
+      };
+    case UPDATE_GOAL_FAIL:
+      return {
+        ...state,
+        updateGoal: {
+          ...state.updateGoal,
+          updateGoalLoading: false,
         },
         error: action.payload,
       };

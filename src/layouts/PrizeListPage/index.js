@@ -40,11 +40,11 @@ const PrizeListPage = () => {
             }}
           />
         </div>
-        <div className={styles.status_bar}>
+        {/* <div className={styles.status_bar}>
           <div className={`${styles.status} ${styles.status_select}`}>全部</div>
           <div className={styles.status}>已完成</div>
           <div className={styles.status}>未完成</div>
-        </div>
+        </div> */}
 
         <div className={styles.goal_bar}>
           <div

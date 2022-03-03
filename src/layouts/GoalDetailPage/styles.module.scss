@@ -81,3 +81,10 @@ label {
   background-color: $finish_status-bg;
   color: $color-white;
 }
+.empty {
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #08415c;
+}
