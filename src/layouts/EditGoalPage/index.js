@@ -162,6 +162,7 @@ const EditGoalPage = () => {
         getGroupData(dispatch, { group_id: group_id, user_id: user_id });
       }
       if (goalID !== "" && goalID !== undefined) {
+        setGoalUserIDLoading(false);
         getGoalData(dispatch, { group_id: group_id, goal_id: goalID });
       }
       if (location.state !== null) {
@@ -188,10 +189,6 @@ const EditGoalPage = () => {
     }
   }, [Goal]);
 
-  useEffect(() => {
-    console.log("datepick" + datepick);
-  }, [datepick]);
-
   //錯誤區
   useEffect(() => {
     if (error !== "") {
@@ -204,7 +201,7 @@ const EditGoalPage = () => {
     <Fragment>
       {editGoalLoading || goalDataLoading || datasDataLoading || GoalUserIDLoading ? (
         <Loading />
-      ) : user_id !== Goal.user_id ? (
+      ) : Goal.title !== undefined ? user_id !== Goal.user_id ? (
         <div className={styles.container}>
           <Alert
             status="error"
@@ -281,7 +278,31 @@ const EditGoalPage = () => {
             </div>
           </div>
         </div>
-      )}
+      ):(<div className={styles.container}>
+        <Alert
+          status="error"
+          open={Errorshow}
+          handleClose={() => {
+            setErrorshow(false);
+            resetErrorData(dispatch);
+          }}
+          text={Errortext}
+        />
+        <div>
+          <img src={Logo} alt="Logo" />
+          <div className={styles.top}>
+            <CustomizeButton
+              title="任務清單"
+              status="contained"
+              click={() => {
+                navigate(path.goallistpage);
+              }}
+            />
+            <CustomizeProfile name={user_name} />
+          </div>
+          <div>無此任務</div>
+        </div>
+      </div>)}
     </Fragment>
   );
 };
