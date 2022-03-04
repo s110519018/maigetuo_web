@@ -421,7 +421,7 @@ const PlanGoalPage = () => {
               <CustomizeProfile name={user_name} />
             </div>
 
-            {Goal !== undefined ? (
+            {Goal === undefined ? (
               <Fragment>無此任務</Fragment>
             ) : (
               <Fragment>
