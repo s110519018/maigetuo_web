@@ -446,7 +446,7 @@ const PlanGoalPage = () => {
                 </div>
               </div>
               <div className={styles.planlist}>
-                {Goal.missions.length === 0 ? (
+                {Goal.missions !== undefined ? Goal.missions.length === 0 ? (
                   <Fragment>目前無任務</Fragment>
                 ) : (
                   <Fragment>
@@ -502,6 +502,8 @@ const PlanGoalPage = () => {
                         </div>
                       ))}
                   </Fragment>
+                ):(
+                  <Fragment>目前無任務</Fragment>
                 )}
               </div>
             </div>

@@ -247,7 +247,7 @@ const GoalDetailPage = () => {
               <CustomizeProfile name={user_name} />
             </div>
             <div className={styles.buttons}>
-              {Goal.user_id === user_id ? (
+              {Goal.missions !== undefined ? Goal.user_id === user_id ? (
                 <Fragment>
                   {!editmode ? (
                     <Fragment>
@@ -312,7 +312,7 @@ const GoalDetailPage = () => {
                     });
                   }}
                 />
-              )}
+              ):""}
             </div>
             <div className={styles.goal}>
               <CustomizeInput
@@ -331,7 +331,7 @@ const GoalDetailPage = () => {
                 </div>
               ) : (
                 <div className={styles.edit}>
-                  {Goal.missions.length === 0 ? (
+                  {Goal.missions !== undefined ? Goal.missions.length === 0 ? (
                     <div className={styles.empty}>目前無任務</div>
                   ) : (
                     <Fragment>
@@ -406,7 +406,7 @@ const GoalDetailPage = () => {
                           </div>
                         ))}
                     </Fragment>
-                  )}
+                  ):(<div className={styles.empty}>目前無任務</div>)}
                 </div>
               )}
             </div>

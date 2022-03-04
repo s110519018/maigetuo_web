@@ -38,7 +38,7 @@ export default function CustomizeTimeline(props) {
 
   return (
     <React.Fragment>
-      {props.missions.length === 0 ? (
+      {props.missions !== undefined ? props.missions.length === 0 ? (
         <div className={classes.empty}>目前無任務</div>
       ) : (
         <Timeline position="alternate">
@@ -79,7 +79,7 @@ export default function CustomizeTimeline(props) {
               </TimelineItem>
             ))}
         </Timeline>
-      )}
+      ):(<div className={classes.empty}>目前無任務</div>)}
     </React.Fragment>
   );
 }
