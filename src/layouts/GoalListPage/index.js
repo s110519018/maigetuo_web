@@ -178,7 +178,7 @@ const GoalListPage = () => {
             </div> */}
 
             <div className={styles.goal_bar}>
-              {goals
+              {goals.length !== 0 ? goals
                 .sort(
                   (a, b) =>
                     new Date(...a.deadline.split("/")) -
@@ -258,7 +258,7 @@ const GoalListPage = () => {
                       </div>
                     )}
                   </div>
-                ))}
+                )):"目前無新增任務"}
             </div>
           </div>
         </div>

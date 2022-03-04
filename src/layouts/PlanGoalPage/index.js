@@ -288,7 +288,11 @@ const PlanGoalPage = () => {
               />
               <CustomizeProfile name={user_name} />
             </div>
-            <div>您為該任務的所有者，無法規劃進度，<br/>請讓夥伴協助規劃唷~</div>
+            <div>
+              您為該任務的所有者，無法規劃進度，
+              <br />
+              請讓夥伴協助規劃唷~
+            </div>
           </div>
         </div>
       ) : (
@@ -416,119 +420,133 @@ const PlanGoalPage = () => {
               />
               <CustomizeProfile name={user_name} />
             </div>
-            <div className={styles.planpart}>
-              <CustomizeInput
-                status="disable"
-                title="任務名稱"
-                defaultValue={Goal.title}
-              />
-              <CustomizeInput
-                status="disable"
-                title="達成日期"
-                defaultValue={Goal.deadline}
-              />
-              <div className={styles.plan}>
-                <div className={styles.plantitle}>
-                  <CalendarTodayIcon
-                    fontSize="small"
-                    sx={{ color: "#08415C" }}
+
+            {Goal !== undefined ? (
+              <Fragment>無此任務</Fragment>
+            ) : (
+              <Fragment>
+                <div className={styles.planpart}>
+                  <CustomizeInput
+                    status="disable"
+                    title="任務名稱"
+                    defaultValue={Goal.title}
                   />
-                  進度規劃
-                </div>
-                <div
-                  className={styles.addicon}
-                  onClick={() => {
-                    setaddText("");
-                    setAddOpen(true);
-                  }}
-                >
-                  <AddCircleOutlineRoundedIcon />
-                </div>
-              </div>
-              <div className={styles.planlist}>
-                {Goal.missions !== undefined ? Goal.missions.length === 0 ? (
-                  <Fragment>目前無任務</Fragment>
-                ) : (
-                  <Fragment>
-                    {Goal.missions
-                      .sort(
-                        (a, b) =>
-                          new Date(...a.deadline.split("/")) -
-                          new Date(...b.deadline.split("/"))
-                      )
-                      .map((mission) => (
-                        <div className={styles.misson} key={mission._id}>
-                          <div className={styles.misson_content}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                              <MobileDatePicker
-                                mask="____/__/__"
-                                label="Date mobile"
-                                inputFormat="yyyy/MM/dd"
-                                cancelText=""
-                                rightArrowButtonText=""
-                                value={mission.deadline}
-                                onChange={(newValue) => {
-                                  handleDateChange(mission._id, newValue);
-                                }}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    size="small"
-                                    label=""
-                                    variant="standard"
+                  <CustomizeInput
+                    status="disable"
+                    title="達成日期"
+                    defaultValue={Goal.deadline}
+                  />
+                  <div className={styles.plan}>
+                    <div className={styles.plantitle}>
+                      <CalendarTodayIcon
+                        fontSize="small"
+                        sx={{ color: "#08415C" }}
+                      />
+                      進度規劃
+                    </div>
+                    <div
+                      className={styles.addicon}
+                      onClick={() => {
+                        setaddText("");
+                        setAddOpen(true);
+                      }}
+                    >
+                      <AddCircleOutlineRoundedIcon />
+                    </div>
+                  </div>
+                  <div className={styles.planlist}>
+                    {Goal.missions.length === 0 ? (
+                      <Fragment>目前無任務</Fragment>
+                    ) : (
+                      <Fragment>
+                        {Goal.missions
+                          .sort(
+                            (a, b) =>
+                              new Date(...a.deadline.split("/")) -
+                              new Date(...b.deadline.split("/"))
+                          )
+                          .map((mission) => (
+                            <div className={styles.misson} key={mission._id}>
+                              <div className={styles.misson_content}>
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDateFns}
+                                >
+                                  <MobileDatePicker
+                                    mask="____/__/__"
+                                    label="Date mobile"
+                                    inputFormat="yyyy/MM/dd"
+                                    cancelText=""
+                                    rightArrowButtonText=""
+                                    value={mission.deadline}
+                                    onChange={(newValue) => {
+                                      handleDateChange(mission._id, newValue);
+                                    }}
+                                    renderInput={(params) => (
+                                      <TextField
+                                        {...params}
+                                        size="small"
+                                        label=""
+                                        variant="standard"
+                                      />
+                                    )}
                                   />
-                                )}
-                              />
-                            </LocalizationProvider>
-                            <TextField
-                              fullWidth
-                              size="small"
-                              defaultValue={mission.title}
-                              variant="standard"
-                              onChange={(e) => {
-                                handleTitleChange(mission._id, e.target.value);
-                              }}
-                            />
-                          </div>
-                          <div
-                            className={styles.misson_setting}
-                            onClick={() => {
-                              setMissionIDDelete(mission._id);
-                              setDeleteOpen(true);
-                            }}
-                          >
-                            <MoreVertSharpIcon />
-                          </div>
-                        </div>
-                      ))}
-                  </Fragment>
-                ):(
-                  <Fragment>目前無任務</Fragment>
-                )}
-              </div>
-            </div>
-            <div className={styles.plantip}>
-              <img src={Logo_little} alt="Logo" />
-              <div className={styles.tipscontent}>
-                不要因為進度落後就擅自延後唷！
-                <br />
-                想想看如何安排時間加快進度吧~
-              </div>
-            </div>
-            <div className={styles.buttons}>
-              <CustomizeButton title="儲存" status="outlined" click={save} />
-              <CustomizeButton
-                title="取消"
-                status="outlined"
-                click={() => {
-                  if (location.state === null) {
-                    liff.closeWindow();
-                  } else {
-                    navigate(-1);
-                  }
-                }}
-              />
-            </div>
+                                </LocalizationProvider>
+                                <TextField
+                                  fullWidth
+                                  size="small"
+                                  defaultValue={mission.title}
+                                  variant="standard"
+                                  onChange={(e) => {
+                                    handleTitleChange(
+                                      mission._id,
+                                      e.target.value
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <div
+                                className={styles.misson_setting}
+                                onClick={() => {
+                                  setMissionIDDelete(mission._id);
+                                  setDeleteOpen(true);
+                                }}
+                              >
+                                <MoreVertSharpIcon />
+                              </div>
+                            </div>
+                          ))}
+                      </Fragment>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.plantip}>
+                  <img src={Logo_little} alt="Logo" />
+                  <div className={styles.tipscontent}>
+                    不要因為進度落後就擅自延後唷！
+                    <br />
+                    想想看如何安排時間加快進度吧~
+                  </div>
+                </div>
+                <div className={styles.buttons}>
+                  <CustomizeButton
+                    title="儲存"
+                    status="outlined"
+                    click={save}
+                  />
+                  <CustomizeButton
+                    title="取消"
+                    status="outlined"
+                    click={() => {
+                      if (location.state === null) {
+                        liff.closeWindow();
+                      } else {
+                        navigate(-1);
+                      }
+                    }}
+                  />
+                </div>
+              </Fragment>
+            )}
           </div>
         </div>
       )}
