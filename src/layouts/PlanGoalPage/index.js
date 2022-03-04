@@ -239,6 +239,7 @@ const PlanGoalPage = () => {
         getGroupData(dispatch, { group_id: group_id, user_id: user_id });
       }
       if (goalID !== "" && goalID !== undefined) {
+        setmissionsLoading(false);
         getGoalData(dispatch, { group_id: group_id, goal_id: goalID });
       }
       if (location.state !== null) {
