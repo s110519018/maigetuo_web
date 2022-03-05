@@ -91,6 +91,8 @@ export const getGoalData = async (dispatch, options) => {
       type: SET_GOAL_DATA,
       payload: data[0],
     });
+    console.log("getGoal: ");
+    console.log(data);
   } catch (error) {
     dispatch({ type: GOAL_DATA_FAIL, payload: "載入時發生問題" });
     console.log(error);

@@ -259,6 +259,7 @@ const PlanGoalPage = () => {
       // console.log(Goal);
       setmissionsLoading(false);
     }
+    console.log(Goal)
   }, [Goal]);
   //錯誤區
   useEffect(() => {
@@ -275,8 +276,44 @@ const PlanGoalPage = () => {
       missionsLoading ||
       planGoalLoading ? (
         <Loading />
+      ) : Object.keys(Goal).length === 0 ? (
+        <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
+          <div>
+            <div className={styles.top}>
+              <CustomizeButton
+                status="back"
+                mr=""
+                click={() => {
+                  navigate(path.goallistpage);
+                }}
+              />
+              <CustomizeProfile name={user_name} />
+            </div>
+            <div>
+              無此任務
+            </div>
+          </div>
+        </div>
       ) : user_id === Goal.user_id ? (
         <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
           <div>
             <div className={styles.top}>
               <CustomizeButton
@@ -420,11 +457,6 @@ const PlanGoalPage = () => {
               />
               <CustomizeProfile name={user_name} />
             </div>
-
-            {Goal === undefined ? (
-              <Fragment>無此任務</Fragment>
-            ) : (
-              <Fragment>
                 <div className={styles.planpart}>
                   <CustomizeInput
                     status="disable"
@@ -545,8 +577,6 @@ const PlanGoalPage = () => {
                     }}
                   />
                 </div>
-              </Fragment>
-            )}
           </div>
         </div>
       )}
