@@ -41,43 +41,48 @@ const CustomizeProgress = (props) => {
           finish++;
         }
       });
-      progress = (finish / missions.length) * 100;
+      progress = Math.trunc((finish / missions.length) * 100);
       return progress;
+    }
+  };
+
+  const calculatePrizeProgress = (goals) => {
+    if (goals.length == 0) {
+      return 0;
+    } else {
+      var finish = 0,
+        all = 0;
+      goals.forEach(function (goal) {
+        goal.missions.forEach(function (mission) {
+          if (mission.status === "O") {
+            finish++;
+          }
+          all++;
+        });
+      });
+      if(all===0){
+        return 0;
+      }
+      else{
+        return finish + "/" + all;
+      }
+      
     }
   };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <div style={{ position: "relative" }}>
-        {/* <LinearProgress
-          className={styles.root}
-          variant="determinate"
-          value={props.value}
-          {...props}
-        /> */}
-        {props.late && calculateGoalProgress(props.missions) < 100 ? (
-          <Fragment>
-            <LATELinearProgress variant="determinate" value={100} />
-            <Typography
-              style={{
-                fontSize: "12px",
-                position: "absolute",
-                color: "white",
-                top: "50%",
-                left: "50%",
-                transform: "translateX(-50%) translateY(-50%)",
-              }}
-            >
-              <Fragment>逾期</Fragment>
-            </Typography>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <BorderLinearProgress
-              variant="determinate"
-              value={calculateGoalProgress(props.missions)}
-            />
-            {calculateGoalProgress(props.missions) === 0 ? (
+      {props.mode !== "prize" ? (
+        <div style={{ position: "relative" }}>
+          {/* <LinearProgress
+        className={styles.root}
+        variant="determinate"
+        value={props.value}
+        {...props}
+      /> */}
+          {props.late && calculateGoalProgress(props.missions) < 100 ? (
+            <Fragment>
+              <LATELinearProgress variant="determinate" value={100} />
               <Typography
                 style={{
                   fontSize: "12px",
@@ -88,7 +93,74 @@ const CustomizeProgress = (props) => {
                   transform: "translateX(-50%) translateY(-50%)",
                 }}
               >
-                <Fragment>0%</Fragment>
+                <Fragment>逾期</Fragment>
+              </Typography>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <BorderLinearProgress
+                variant="determinate"
+                value={calculateGoalProgress(props.missions)}
+              />
+              {calculateGoalProgress(props.missions) === 0 ? (
+                <Typography
+                  style={{
+                    fontSize: "12px",
+                    position: "absolute",
+                    color: "white",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translateX(-50%) translateY(-50%)",
+                  }}
+                >
+                  <Fragment>0%</Fragment>
+                </Typography>
+              ) : (
+                <Typography
+                  style={{
+                    fontSize: "12px",
+                    position: "absolute",
+                    color: "white",
+                    top: "50%",
+                    left: calculateGoalProgress(props.missions) / 2 + "%",
+                    transform: "translateX(-50%) translateY(-50%)",
+                  }}
+                >
+                  <Fragment>
+                    {calculateGoalProgress(props.missions) === 100 ? (
+                      "完成"
+                    ) : (
+                      <Fragment>
+                        {calculateGoalProgress(props.missions)}%
+                      </Fragment>
+                    )}
+                  </Fragment>
+                </Typography>
+              )}
+            </Fragment>
+          )}
+        </div>
+      ) : (
+        <div style={{ position: "relative" }}>
+          <Fragment>
+            <BorderLinearProgress
+              variant="determinate"
+              value={Math.trunc(
+                eval(calculatePrizeProgress(props.goals)) * 100
+              )}
+            />
+            {calculatePrizeProgress(props.goals) === 0 ? (
+              <Typography
+                style={{
+                  fontSize: "12px",
+                  position: "absolute",
+                  color: "white",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translateX(-50%) translateY(-50%)",
+                }}
+              >
+                <Fragment>{calculatePrizeProgress(props.goals)}</Fragment>
               </Typography>
             ) : (
               <Typography
@@ -97,24 +169,18 @@ const CustomizeProgress = (props) => {
                   position: "absolute",
                   color: "white",
                   top: "50%",
-                  left: calculateGoalProgress(props.missions) / 2 + "%",
+                  left:
+                    Math.trunc(eval(calculatePrizeProgress(props.goals)) * 50) +
+                    "%",
                   transform: "translateX(-50%) translateY(-50%)",
                 }}
               >
-                <Fragment>
-                  {calculateGoalProgress(props.missions) === 100 ? (
-                    "完成"
-                  ) : (
-                    <Fragment>
-                      {calculateGoalProgress(props.missions)}%
-                    </Fragment>
-                  )}
-                </Fragment>
+                <Fragment>{calculatePrizeProgress(props.goals)}</Fragment>
               </Typography>
             )}
           </Fragment>
-        )}
-      </div>
+        </div>
+      )}
     </Box>
   );
 };

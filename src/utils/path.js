@@ -13,5 +13,5 @@ export default {
     sharecarddetailpage: '/sharecarddetailpage',
     addsharecardpage: '/addsharecardpage',
     editsharecardpage: '/editsharecardpage',
-    sharecardcategorypage: '/sharecardcategorypage',
+    // sharecardcategorypage: '/sharecardcategorypage',
 };

@@ -94,4 +94,5 @@
   background-color: $color-white;
   padding: 20px;
   @include content;
+  white-space: pre-line;
 }

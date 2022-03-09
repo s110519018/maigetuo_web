@@ -23,10 +23,25 @@ import {
   UPDATE_GOAL_REQUEST,
   UPDATE_GOAL_DATA,
   UPDATE_GOAL_FAIL,
+  PRIZES_DATA_REQUEST,
+  SET_PRIZES_DATA,
+  PRIZES_DATA_FAIL,
+  ADD_PRIZE_REQUEST,
+  ADD_PRIZE_DATA,
+  ADD_PRIZE_FAIL,
+  DELETE_PRIZE_REQUEST,
+  DELETE_PRIZE_DATA,
+  DELETE_PRIZE_FAIL,
+  PRIZE_DATA_REQUEST,
+  SET_PRIZE_DATA,
+  PRIZE_DATA_FAIL,
+  EDIT_PRIZE_REQUEST,
+  EDIT_PRIZE_DATA,
+  EDIT_PRIZE_FAIL,
 } from "./actionTypes";
 
-const SERVER_URL = "https://maigetuo.herokuapp.com/api";
-// const SERVER_URL = "http://localhost:5000/api";
+// const SERVER_URL = "https://maigetuo.herokuapp.com/api";
+const SERVER_URL = "http://localhost:5000/api";
 
 export const resetErrorData = async (dispatch, options) => {
   dispatch({
@@ -124,14 +139,11 @@ export const deleteGoalData = async (dispatch, options) => {
   dispatch({ type: DELETE_GOAL_REQUEST });
   const { group_id, goal_id } = options;
   try {
-    const { data } = await axios.delete(
-      SERVER_URL + "/goals/" + goal_id,
-      {
-        data: {
-          group_id: group_id,
-        },
-      }
-    );
+    const { data } = await axios.delete(SERVER_URL + "/goals/" + goal_id, {
+      data: {
+        group_id: group_id,
+      },
+    });
     dispatch({
       type: DELETE_GOAL_DATA,
       payload: data,
@@ -148,10 +160,13 @@ export const planGoalData = async (dispatch, options) => {
   dispatch({ type: PLAN_GOAL_REQUEST });
   const { group_id, goal_id, missions } = options;
   try {
-    const { data } = await axios.put(SERVER_URL + "/goals/planmissions/" + goal_id, {
-      group_id: group_id,
-      missions: missions,
-    });
+    const { data } = await axios.put(
+      SERVER_URL + "/goals/planmissions/" + goal_id,
+      {
+        group_id: group_id,
+        missions: missions,
+      }
+    );
     dispatch({
       type: PLAN_GOAL_DATA,
       payload: data,
@@ -168,10 +183,13 @@ export const updateGoalData = async (dispatch, options) => {
   dispatch({ type: UPDATE_GOAL_REQUEST });
   const { group_id, goal_id, missions } = options;
   try {
-    const { data } = await axios.put(SERVER_URL + "/goals/updatemissions/" + goal_id, {
-      group_id: group_id,
-      missions: missions,
-    });
+    const { data } = await axios.put(
+      SERVER_URL + "/goals/updatemissions/" + goal_id,
+      {
+        group_id: group_id,
+        missions: missions,
+      }
+    );
     dispatch({
       type: UPDATE_GOAL_DATA,
       payload: data,
@@ -179,6 +197,106 @@ export const updateGoalData = async (dispatch, options) => {
     return true;
   } catch (error) {
     dispatch({ type: UPDATE_GOAL_FAIL, payload: "在更新進度時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const getPrizesList = async (dispatch, options) => {
+  dispatch({ type: PRIZES_DATA_REQUEST });
+  const { group_id } = options;
+  try {
+    const { data } = await axios.get(
+      SERVER_URL + "/prizes/?groupid=" + group_id
+    );
+    dispatch({
+      type: SET_PRIZES_DATA,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: PRIZES_DATA_FAIL, payload: "載入時發生問題" });
+    console.log(error);
+  }
+};
+
+export const getPrizeData = async (dispatch, options) => {
+  dispatch({ type: PRIZE_DATA_REQUEST });
+  const { group_id, prize_id } = options;
+  try {
+    const { data } = await axios.get(
+      SERVER_URL + "/prizes/" + prize_id + "?groupid=" + group_id
+    );
+    dispatch({
+      type: SET_PRIZE_DATA,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: PRIZE_DATA_FAIL, payload: "載入時發生問題" });
+    console.log(error);
+  }
+};
+
+export const addPrizeData = async (dispatch, options) => {
+  dispatch({ type: ADD_PRIZE_REQUEST });
+  const { group_id, title, content, goals_id } = options;
+  try {
+    const { data } = await axios.post(SERVER_URL + "/prizes/addprizes", {
+      group_id: group_id,
+      title: title,
+      content: content,
+      goals_id: goals_id,
+      status: "",
+    });
+    dispatch({
+      type: ADD_PRIZE_DATA,
+      payload: data.Allprize,
+    });
+    return data.prize_id;
+  } catch (error) {
+    dispatch({ type: ADD_PRIZE_FAIL, payload: "新增時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const deletePrizeData = async (dispatch, options) => {
+  dispatch({ type: DELETE_PRIZE_REQUEST });
+  const { group_id, prize_id } = options;
+  try {
+    const { data } = await axios.delete(SERVER_URL + "/prizes/" + prize_id, {
+      data: {
+        group_id: group_id,
+      },
+    });
+    dispatch({
+      type: DELETE_PRIZE_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: DELETE_PRIZE_FAIL, payload: "刪除時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const editPrizeData = async (dispatch, options) => {
+  dispatch({ type: EDIT_PRIZE_REQUEST });
+  const { group_id, prize_id, title, content, goals_id } = options;
+  try {
+    const { data } = await axios.put(SERVER_URL + "/prizes/" + prize_id, {
+      group_id: group_id,
+      title: title,
+      content: content,
+      goals_id: goals_id,
+    });
+    dispatch({
+      type: EDIT_PRIZE_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: EDIT_PRIZE_FAIL, payload: "編輯時發生問題" });
     console.log(error);
     return false;
   }

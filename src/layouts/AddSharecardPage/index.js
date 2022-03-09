@@ -24,17 +24,11 @@ const AddSharecardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { happy } = QueryString.parse(location.search);
-  const [opencategory, setCategoryOpen] = useState(false);
+  // const [opencategory, setCategoryOpen] = useState(false);
 
   const [name, setName] = useState("Cat in the Hat");
   const onChangeContent = (value) => {
     setName(value);
-  };
-
-  const [datepick, setDate] = React.useState();
-  const onChangeDate = (value) => {
-    setDate(value);
-    // console.log(datepick.toString());
   };
 
   //寄送訊息
@@ -86,8 +80,8 @@ const AddSharecardPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* 選擇達成門檻 */}
-      <Dialog
+      {/* 選擇分類 */}
+      {/* <Dialog
         open={opencategory}
         onClose={() => {
           setCategoryOpen(false);
@@ -116,7 +110,7 @@ const AddSharecardPage = () => {
             取消
           </button>
         </div>
-      </Dialog>
+      </Dialog> */}
       <div>
         <img src={Logo} alt="Logo" />
         <div className={styles.top}>
@@ -134,7 +128,7 @@ const AddSharecardPage = () => {
             placeholder="請輸入分享卡名稱"
             onChangeContent={onChangeContent}
           />
-          <div className={styles.reach}>
+          {/* <div className={styles.reach}>
             <div className={styles.reach_title}>選擇分類</div>
             <div
               className={styles.goal_selecter}
@@ -145,7 +139,7 @@ const AddSharecardPage = () => {
               <div>垃圾垃</div>
               <ArrowDropDownOutlinedIcon />
             </div>
-          </div>
+          </div> */}
           <div className={styles.detail}>
             <div className={styles.detail_title}>內容</div>
             <textarea placeholder="請輸入分享卡描述"></textarea>

@@ -201,7 +201,7 @@ const GoalListPage = () => {
                     </div>
                     <div className={styles.title}>{goal.title}</div>
                     <div className={styles.date}>{goal.deadline}</div>
-                    <CustomizeProgress value={30} missions={goal.missions} late={new Date(goal.deadline)<new Date()} />
+                    <CustomizeProgress mode="goal" missions={goal.missions} late={new Date(goal.deadline)<new Date()} />
                     {user_id === goal.user_id ? (
                       <div className={styles.user}>
                         <div>

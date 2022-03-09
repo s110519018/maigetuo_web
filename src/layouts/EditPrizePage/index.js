@@ -10,173 +10,437 @@ import Logo from "../../assets/image/Logo.png";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeButton from "../../component/CustomizeButton";
 import CustomizeProfile from "../../component/CustomizeProfile";
-import { TextField } from "@mui/material";
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+import Alert from "../../component/Alert";
+import Loading from "../../component/Loading";
 
-//https://dev.to/yutagoto/react-typescript-liff-1kpk
-//https://medium.com/frochu/%E5%9C%A8react-app%E4%B8%AD%E6%9C%80%E7%82%BA%E5%B8%B8%E8%A6%8B%E7%9A%84%E8%B7%A8%E7%AB%99%E6%94%BB%E6%93%8A%E6%BC%8F%E6%B4%9E-2fdd95f08466
-// XSS 跨站攻擊
+//Store
+import { StoreContext } from "../../Store/reducer";
+import {
+  resetErrorData,
+  getGroupData,
+  setBaseData,
+  getGoalsList,
+  getPrizeData,
+  editPrizeData,
+} from "../../Store/actions";
+
 const EditPrizePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { happy } = QueryString.parse(location.search);
   const [openreach, setReachOpen] = useState(false);
+  const [Errortext, setErrortext] = useState("");
+  const [Errorshow, setErrorshow] = useState(false);
+  const [UserGoals, setUserGoals] = useState([]);
+  const [MemberGoals, setMemberGoals] = useState([]);
+  const [Prize, setPrize] = useState({ title: "", content: "", goals_id: [] });
+  const [FilterLoading, setFilterLoading] = useState(true);
+  const [GoalSelectID, setGoalSelectID] = useState("");
+  const [UserSelectData, setUserSelectData] = useState({
+    title: "",
+    id: "",
+  });
+  const [MemberSelectData, setMemberSelectData] = useState({
+    title: "",
+    id: "",
+  });
+  const [contentText, setContentText] = useState("");
 
-  const [name, setName] = useState("Cat in the Hat");
+  const [name, setName] = useState("");
   const onChangeContent = (value) => {
     setName(value);
   };
 
-  const [datepick, setDate] = React.useState();
-  const onChangeDate = (value) => {
-    setDate(value);
-    // console.log(datepick.toString());
+  //資料內容
+  const {
+    state: {
+      baseData: {
+        group_id,
+        user_id,
+        user_name,
+        member_id,
+        member_name,
+        datasDataLoading,
+      },
+      goalsData: { goals, goalsDataLoading },
+      prizeData: { prize, prizeDataLoading },
+      error,
+    },
+    dispatch,
+  } = useContext(StoreContext);
+
+  //篩選目標
+  const goal_filter = () => {
+    const result_user = goals.filter((goals) => goals.user_id === user_id);
+    const result_member = goals.filter((goals) => goals.user_id === member_id);
+    setUserGoals(result_user);
+    setMemberGoals(result_member);
+    setFilterLoading(false);
+    console.log(UserGoals);
+    console.log(MemberGoals);
   };
 
-  //寄送訊息
-  const sendMessage = () => {
-    liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}); // 第一次一定要登入
-        } else if (liff.isInClient()) {
-          // LIFFので動いているのであれば
-          liff
-            .sendMessages([
-              {
-                // 發送訊息
-                type: "text",
-                text: "You've successfully sent a message! Hooray!",
-              },
-            ])
-            .then(function () {
-              window.alert("Message sent");
-            })
-            .catch(function (error) {
-              window.alert("Error sending message: " + error);
-            });
-        }
-      });
+  const save = () => {
+    try {
+      if (name === "") {
+        throw "請輸入任務名稱!";
+      } else if (name.length > 20) {
+        throw "字數過長，請低於20字";
+      } else if (contentText.length > 100) {
+        throw "詳細內容字數過長，請低於100字!";
+      } else {
+        var text;
+        text = contentText.replace("<script>", "");
+        text = text.replace("</script>", "");
+        // text = text.replace("\n", "<br/>");
+        const edit_finish = editPrizeData(dispatch, {
+          group_id: group_id,
+          prize_id: Prize._id,
+          title: name,
+          content: text,
+          goals_id: [UserSelectData.id, MemberSelectData.id],
+        });
+
+        edit_finish.then(function (result) {
+          if (result) {
+            navigate(path.prizedetailpage);
+          }
+        });
+      }
+    } catch (error) {
+      setErrorshow(true);
+      setErrortext(error);
+    }
   };
 
-  /* 追加: Alert顯示UserProfile */
-  const getUserInfo = () => {
+  useEffect(() => {
+    resetErrorData(dispatch);
+    var { groupID } = QueryString.parse(location.search);
+    var userID = "";
+    var userName = "";
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
-      if (!liff.isLoggedIn()) {
-        liff.login({}); // ログインしていなければ最初にログインする
+      if (!liff.isLoggedIn() || liff.getOS() === "web") {
+        userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
+        userName = "小米";
+        if (groupID === "" || groupID === undefined) {
+          groupID = sessionStorage.getItem("group_id");
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        } else {
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        }
       } else if (liff.isInClient()) {
         liff
-          .getProfile() // ユーザ情報を取得する
+          .getProfile()
           .then((profile) => {
-            const userId = profile.userId;
-            const displayName = profile.displayName;
-            alert(`Name: ${displayName}, userId: ${userId}`);
+            userID = profile.userId;
+            userName = profile.displayName;
+            if (groupID === "" || groupID === undefined) {
+              groupID = sessionStorage.getItem("group_id");
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            } else {
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            }
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            setErrorshow(true);
+            setErrortext("發生錯誤，訊息:" + error);
           });
       }
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    var { prizeID } = QueryString.parse(location.search);
+    if (group_id !== "") {
+      getGoalsList(dispatch, { group_id: group_id });
+      if (member_id === "") {
+        // console.log(member_id);
+        getGroupData(dispatch, { group_id: group_id, user_id: user_id });
+      }
+      if (prizeID !== "" && prizeID !== undefined) {
+        setFilterLoading(false);
+        getPrizeData(dispatch, { group_id: group_id, prize_id: prizeID });
+      }
+      if (location.state !== null) {
+        setPrize(location.state.prize);
+        setName(location.state.prize.title);
+        setContentText(location.state.prize.content);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [group_id]);
+
+  useEffect(() => {
+    if (location.state === null && prize.title !== undefined) {
+      setPrize(prize);
+      setName(prize.title);
+      setContentText(prize.content);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prize]);
+
+  useEffect(() => {
+    if (Prize.title !== "") {
+      goal_filter();
+      goals.forEach(function (goal) {
+        if (Prize.goals_id.includes(goal._id)) {
+          if (user_id === goal.user_id) {
+            setUserSelectData({
+              title: goal.title,
+              id: goal._id,
+            });
+          } else if (member_id === goal.user_id) {
+            setMemberSelectData({
+              title: goal.title,
+              id: goal._id,
+            });
+          }
+        }
+      });
+      setFilterLoading(false);
+    }
+  }, [Prize]);
+
+  // useEffect(() => {
+  //   if (member_id !== "") {
+  //     goal_filter();
+  //   }
+  // }, [member_id]);
+
+  //錯誤區
+  useEffect(() => {
+    if (error !== "") {
+      setFilterLoading(false);
+      setErrorshow(true);
+      setErrortext(error);
+    }
+  }, [error]);
 
   return (
-    <div className={styles.container}>
-      {/* 選擇達成門檻 */}
-      <Dialog
-        open={openreach}
-        onClose={() => {
-          setReachOpen(false);
-        }}
-        fullWidth={true}
-      >
-        <div className={styles.selectmodal}>
-          <div className={styles.modal_title}>選擇任務</div>
-          <div className={styles.modal_content}>
-            <div className={styles.category}>咖啡咖啡廳咖啡廳廳咖啡咖啡廳咖啡廳廳咖啡咖啡廳咖啡廳廳</div>
-            <hr/>
-          </div>
-          <button
-            className={styles.cancelbtn}
-            onClick={() => {
+    <Fragment>
+      {datasDataLoading ||
+      FilterLoading ||
+      goalsDataLoading ||
+      prizeDataLoading ? (
+        <Loading />
+      ) : (
+        <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
+          <Dialog
+            open={openreach}
+            onClose={() => {
               setReachOpen(false);
             }}
+            fullWidth={true}
           >
-            取消
-          </button>
-        </div>
-      </Dialog>
-      <div>
-        <img src={Logo} alt="Logo" />
-        <div className={styles.top}>
-          <CustomizeButton
-            title="獎勵清單"
-            status="contained"
-            click={() => {
-              navigate(path.prizelistpage);
-            }}
-          />
-          <CustomizeProfile name="淯宣" />
-        </div>
-        <div className={styles.content}>
-          <CustomizeInput
-            title="獎勵名稱"
-            placeholder="請輸入獎勵名稱"
-            onChangeContent={onChangeContent}
-          />
-          <div className={styles.reach}>
-            <div className={styles.reach_title}>達成任務</div>
-            <div className={styles.reach_goals}>
-              <div className={styles.reach_goal}>
-                <CustomizeProfile name="淯宣" />
-                <div
-                  className={styles.goal_selecter}
-                  onClick={() => {
-                    setReachOpen(true);
-                  }}
-                >
-                  <div>垃圾</div>
-                  <ArrowDropDownOutlinedIcon/>
+            <div className={styles.selectmodal}>
+              <div className={styles.modal_title}>選擇任務</div>
+              <div className={styles.modal_content}>
+                {GoalSelectID === user_id ? (
+                  UserGoals.length === 0 ? (
+                    "無任務"
+                  ) : (
+                    UserGoals.map((goal) => (
+                      <Fragment key={"select" + goal._id}>
+                        <div
+                          className={styles.category}
+                          style={{
+                            backgroundColor:
+                              goal._id === UserSelectData.id
+                                ? "#08415c"
+                                : "transparent",
+                            color:
+                              goal._id === UserSelectData.id
+                                ? "white"
+                                : "#08415c",
+                          }}
+                          onClick={() => {
+                            setUserSelectData({
+                              title: goal.title,
+                              id: goal._id,
+                            });
+                            setReachOpen(false);
+                          }}
+                        >
+                          {goal.title}
+                        </div>
+                        <hr />
+                      </Fragment>
+                    ))
+                  )
+                ) : GoalSelectID === member_id ? (
+                  MemberGoals.length === 0 ? (
+                    "無任務"
+                  ) : (
+                    MemberGoals.map((goal, index, row) => (
+                      <Fragment key={"select" + goal._id}>
+                        <div
+                          className={styles.category}
+                          style={{
+                            backgroundColor:
+                              goal._id === MemberSelectData.id
+                                ? "#08415c"
+                                : "transparent",
+                            color:
+                              goal._id === MemberSelectData.id
+                                ? "white"
+                                : "#08415c",
+                          }}
+                          onClick={() => {
+                            setMemberSelectData({
+                              title: goal.title,
+                              id: goal._id,
+                            });
+                            setReachOpen(false);
+                          }}
+                        >
+                          {goal.title}
+                        </div>
+                        <hr
+                          style={{
+                            display:
+                              row.length - 1 === index && row.length !== 1
+                                ? ""
+                                : "none",
+                          }}
+                        />
+                      </Fragment>
+                    ))
+                  )
+                ) : (
+                  <div>載入錯誤</div>
+                )}
+              </div>
+              <button
+                className={styles.unselectbtn}
+                onClick={() => {
+                  if (GoalSelectID === user_id) {
+                    setUserSelectData({ title: "", id: "" });
+                  } else if (GoalSelectID === member_id) {
+                    setMemberSelectData({ title: "", id: "" });
+                  }
+                  setReachOpen(false);
+                }}
+              >
+                全部取消
+              </button>
+              <button
+                className={styles.cancelbtn}
+                onClick={() => {
+                  setReachOpen(false);
+                }}
+              >
+                返回
+              </button>
+            </div>
+          </Dialog>
+          <div>
+            <img src={Logo} alt="Logo" />
+            <div className={styles.top}>
+              <CustomizeButton
+                title="獎勵清單"
+                status="contained"
+                click={() => {
+                  navigate(path.prizelistpage);
+                }}
+              />
+              <CustomizeProfile name={user_name} />
+            </div>
+            <div className={styles.content}>
+              <CustomizeInput
+                title="獎勵名稱"
+                placeholder="請輸入獎勵名稱"
+                defaultValue={name}
+                onChangeContent={onChangeContent}
+              />
+              <div className={styles.reach}>
+                <div className={styles.reach_title}>達成任務</div>
+                <div className={styles.reach_goals}>
+                  <div className={styles.reach_goal}>
+                    <CustomizeProfile name={user_name} />
+                    <div
+                      className={styles.goal_selecter}
+                      onClick={() => {
+                        setGoalSelectID(user_id);
+                        setReachOpen(true);
+                      }}
+                    >
+                      <div>{UserSelectData.title}</div>
+                      <ArrowDropDownOutlinedIcon />
+                    </div>
+                  </div>
+                  <div className={styles.reach_goal}>
+                    <CustomizeProfile name={member_name} />
+                    <div
+                      className={styles.goal_selecter}
+                      onClick={() => {
+                        setGoalSelectID(member_id);
+                        setReachOpen(true);
+                      }}
+                    >
+                      <div>{MemberSelectData.title}</div>
+                      <ArrowDropDownOutlinedIcon />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className={styles.reach_goal}>
-                <CustomizeProfile name="品宣" />
-                <div
-                  className={styles.goal_selecter}
-                  onClick={() => {
-                    setReachOpen(true);
-                  }}
-                >
-                  <div>垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾垃圾</div>
-                  <ArrowDropDownOutlinedIcon/>
-                </div>
+              <div className={styles.detail}>
+                <div className={styles.detail_title}>詳細內容</div>
+                <textarea
+                  placeholder="請輸入獎勵詳細內容"
+                  type="text"
+                  onChange={(e) => setContentText(e.target.value)}
+                  value={contentText}
+                ></textarea>
               </div>
             </div>
-          </div>
-          <div className={styles.detail}>
-            <div className={styles.detail_title}>詳細內容</div>
-            <textarea placeholder="請輸入獎勵詳細內容">
-            </textarea>
+            {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
+            <div className={styles.buttons}>
+              <CustomizeButton
+                title="儲存"
+                status="outlined"
+                click={save}
+              />
+              <CustomizeButton
+                title="取消"
+                status="outlined"
+                click={() => {
+                  if (location.state === null) {
+                    liff.closeWindow();
+                  } else {
+                    navigate(-1);
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
-        {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
-        <div className={styles.buttons}>
-          <CustomizeButton title="儲存" status="outlined" click={sendMessage} />
-          <CustomizeButton
-            title="取消"
-            status="outlined"
-            click={() => {
-              if (location.state === null) {
-                liff.closeWindow();
-              } else {
-                navigate(-1);
-              }
-            }}
-          />
-        </div>
-        {happy}
-      </div>
-    </div>
+      )}
+    </Fragment>
   );
 };
 

@@ -14,7 +14,6 @@ import Alert from "../../component/Alert";
 const SharecardDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [editmode, setEditmode] = React.useState(false);
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
   const useStyles = makeStyles({
@@ -89,9 +88,9 @@ const SharecardDetailPage = () => {
         </div>
         <div className={styles.sharecard}>
           <div className={styles.sharecard_title}>架構圖規劃</div>
-          <div className={styles.sharecard_category}>
-            架構圖規劃架構圖規劃架構圖規劃
-          </div>
+          {/* <div className={styles.sharecard_category}>
+            改寫是誰發布的
+          </div> */}
           <div className={styles.sharecard_content}>架構圖規劃</div>
         </div>
       </div>

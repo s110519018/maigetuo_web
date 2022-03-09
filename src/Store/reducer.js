@@ -24,6 +24,21 @@ import {
   UPDATE_GOAL_REQUEST,
   UPDATE_GOAL_DATA,
   UPDATE_GOAL_FAIL,
+  PRIZES_DATA_REQUEST,
+  SET_PRIZES_DATA,
+  PRIZES_DATA_FAIL,
+  ADD_PRIZE_REQUEST,
+  ADD_PRIZE_DATA,
+  ADD_PRIZE_FAIL,
+  DELETE_PRIZE_REQUEST,
+  DELETE_PRIZE_DATA,
+  DELETE_PRIZE_FAIL,
+  PRIZE_DATA_REQUEST,
+  SET_PRIZE_DATA,
+  PRIZE_DATA_FAIL,
+  EDIT_PRIZE_REQUEST,
+  EDIT_PRIZE_DATA,
+  EDIT_PRIZE_FAIL,
 } from "./actionTypes";
 
 export const StoreContext = createContext();
@@ -57,6 +72,25 @@ const initialState = {
   },
   updateGoal: {
     updateGoalLoading: false,
+  },
+  prizesData: {
+    prizes: [],
+    goals: [],
+    prizesDataLoading: false,
+  },
+  prizeData: {
+    prize: [],
+    goals: [],
+    prizeDataLoading: false,
+  },
+  addPrize: {
+    addPrizeLoading: false,
+  },
+  deletePrize: {
+    deletePrizeLoading: false,
+  },
+  editPrize: {
+    editPrizeLoading: false,
   },
   error: "",
 };
@@ -301,6 +335,170 @@ function reducer(state, action) {
         updateGoal: {
           ...state.updateGoal,
           updateGoalLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //獎勵列表載入
+    case PRIZES_DATA_REQUEST:
+      return {
+        ...state,
+        prizesData: {
+          ...state.prizesData,
+          prizes: [],
+          goals: [],
+          goalsDataLoading: true,
+        },
+        error: "",
+      };
+    case SET_PRIZES_DATA:
+      return {
+        ...state,
+        prizesData: {
+          ...state.prizesData,
+          prizes: action.payload.Allprize,
+          goals: action.payload.Allgoal,
+          prizesDataLoading: false,
+        },
+        error: "",
+      };
+    case PRIZES_DATA_FAIL:
+      return {
+        ...state,
+        prizesData: {
+          ...state.prizesData,
+          prizesDataLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //新增獎勵
+    case ADD_PRIZE_REQUEST:
+      return {
+        ...state,
+        addPrize: {
+          ...state.addPrize,
+          addPrizeLoading: true,
+        },
+        error: "",
+      };
+    case ADD_PRIZE_DATA:
+      return {
+        ...state,
+        addPrize: {
+          ...state.addPrize,
+          addPrizeLoading: false,
+        },
+        error: "",
+      };
+    case ADD_PRIZE_FAIL:
+      return {
+        ...state,
+        addPrize: {
+          ...state.addPrize,
+          addPrizeLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //刪除獎勵
+    case DELETE_PRIZE_REQUEST:
+      return {
+        ...state,
+        deletePrize: {
+          ...state.deletePrize,
+          deletePrizeLoading: true,
+        },
+        error: "",
+      };
+    case DELETE_PRIZE_DATA:
+      return {
+        ...state,
+        prizesData: {
+          ...state.prizesData,
+          prizes: action.payload.Allprize,
+          goals: action.payload.Allgoal,
+          prizesDataLoading: false,
+        },
+        deletePrize: {
+          ...state.deletePrize,
+          deletePrizeLoading: false,
+        },
+        error: "",
+      };
+    case DELETE_PRIZE_FAIL:
+      return {
+        ...state,
+        deletePrize: {
+          ...state.deletePrize,
+          deletePrizeLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //單一獎勵載入
+    case PRIZE_DATA_REQUEST:
+      return {
+        ...state,
+        prizeData: {
+          prize: [],
+          goals: [],
+          prizeDataLoading: true,
+        },
+        error: "",
+      };
+    case SET_PRIZE_DATA:
+      return {
+        ...state,
+        prizeData: {
+          ...state.prizeData,
+          prize: action.payload.Singleprize,
+          goals: action.payload.Allgoal,
+          prizeDataLoading: false,
+        },
+        error: "",
+      };
+    case PRIZE_DATA_FAIL:
+      return {
+        ...state,
+        prizeData: {
+          ...state.prizeData,
+          prizeDataLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //編輯獎勵
+    case EDIT_PRIZE_REQUEST:
+      return {
+        ...state,
+        editPrize: {
+          ...state.editPrize,
+          editPrizeLoading: true,
+        },
+        error: "",
+      };
+    case EDIT_PRIZE_DATA:
+      return {
+        ...state,
+        prizeData: {
+          ...state.prizeData,
+          prize: action.payload.Singleprize,
+          goals:action.payload.Allgoal,
+          prizeDataLoading: false,
+        },
+        editPrize: {
+          ...state.editPrize,
+          editPrizeLoading: false,
+        },
+        error: "",
+      };
+    case EDIT_PRIZE_FAIL:
+      return {
+        ...state,
+        editPrize: {
+          ...state.editPrize,
+          editPrizeLoading: false,
         },
         error: action.payload,
       };

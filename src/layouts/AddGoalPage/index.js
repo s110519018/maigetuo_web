@@ -80,7 +80,7 @@ const AddGoalPage = () => {
             setErrorshow(true);
             setErrortext("請在line群組中操作唷!");
             console.log(
-              "我要新增任務: [" +
+              "新增任務: [" +
                 name +
                 "] (" +
                 formatDate(datepick).toString() +

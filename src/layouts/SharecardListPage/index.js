@@ -12,7 +12,7 @@ const SharecardListPage = () => {
   const location = useLocation();
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Alerttext, setAlerttext] = React.useState("確定要刪除嗎？");
-  const [opencategory, setCategoryOpen] = useState(false);
+  // const [opencategory, setCategoryOpen] = useState(false);
 
   const handleClickOpen = () => {
     setAlertshow(true);
@@ -33,7 +33,7 @@ const SharecardListPage = () => {
         text={Alerttext}
       />
       {/* 選擇類別 */}
-      <Dialog
+      {/* <Dialog
         open={opencategory}
         onClose={() => {
           setCategoryOpen(false);
@@ -54,7 +54,7 @@ const SharecardListPage = () => {
             取消
           </button>
         </div>
-      </Dialog>
+      </Dialog> */}
       <div>
         <div className={styles.top}>
           <CustomizeButton
@@ -70,7 +70,7 @@ const SharecardListPage = () => {
             }}
           />
         </div>
-        <div className={styles.category_bar}>
+        {/* <div className={styles.category_bar}>
           <div
             className={styles.category_icon}
             onClick={() => {
@@ -81,7 +81,7 @@ const SharecardListPage = () => {
             類別
           </div>
           <div className={styles.category_select}># 好去處</div>
-        </div>
+        </div> */}
 
         <div className={styles.card_bar}>
           <div
@@ -90,7 +90,7 @@ const SharecardListPage = () => {
               navigate(path.sharecarddetailpage);
             }}
           >
-            <div className={styles.name}>拖延症克服</div>
+            {/* <div className={styles.name}>拖延症克服</div> */}
             <div className={styles.title}>時間管理方法結論</div>
             <div className={styles.user}>
               <div>
