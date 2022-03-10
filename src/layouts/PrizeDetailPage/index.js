@@ -89,11 +89,9 @@ const PrizeDetailPage = () => {
     },
     dispatch,
   } = useContext(StoreContext);
-  const [editmode, setEditmode] = React.useState(false);
   const [Alertshow, setAlertshow] = React.useState(false);
   const [Errorshow, setErrorshow] = useState(false);
   const [Errortext, setErrortext] = useState("");
-
   //因為location近來的渲染有時間差，所以還是必須加個loading
   const [prizeLoading, setprizeLoading] = useState(true);
   const [Prize, setPrize] = useState({});
@@ -129,7 +127,7 @@ const PrizeDetailPage = () => {
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
       if (!liff.isLoggedIn() || liff.getOS() === "web") {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
-        userName = "阿呆";
+        userName = "淯萱";
         if (groupID === "" || groupID === undefined) {
           groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {
@@ -228,6 +226,15 @@ const PrizeDetailPage = () => {
             handleSubmit={handleSubmit}
             text="確定要刪除嗎？"
           />
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
           <div>
             <div className={styles.top}>
               <CustomizeButton
@@ -299,7 +306,7 @@ const PrizeDetailPage = () => {
                   <img src={Logo_little} alt="Logo" />
                   <div className={styles.comment}>{senttext[random]}</div>
                 </div>
-                <CustomizeProgress mode="prize" goals={goal_filter(goals, prize.goals_id)}/>
+                <CustomizeProgress mode="prize" goals={goal_filter(Goals, Prize.goals_id)}/>
               </div>
               <div className={styles.detail}>{Prize.content}</div>
             </div>

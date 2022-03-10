@@ -125,9 +125,9 @@ const AddPrizePage = () => {
                     {
                       type: "image",
                       originalContentUrl:
-                        "https://i.imgur.com/MwS42AE.png" + "?prize_id="+result,
+                        "https://i.imgur.com/xZEhZ34.png" + "?prize_id="+result,
                       previewImageUrl:
-                        "https://i.imgur.com/MwS42AE.png" + "?prize_id="+result,
+                        "https://i.imgur.com/AH6T08f.png" + "?prize_id="+result,
                     },
                   ])
                   .then(function () {
@@ -152,7 +152,7 @@ const AddPrizePage = () => {
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
       if (!liff.isLoggedIn() || liff.getOS() === "web") {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
-        userName = "阿呆";
+        userName = "淯萱";
         if (groupID === "" || groupID === undefined) {
           groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {

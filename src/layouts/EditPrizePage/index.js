@@ -121,7 +121,7 @@ const EditPrizePage = () => {
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
       if (!liff.isLoggedIn() || liff.getOS() === "web") {
         userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
-        userName = "小米";
+        userName = "淯萱";
         if (groupID === "" || groupID === undefined) {
           groupID = sessionStorage.getItem("group_id");
           setBaseData(dispatch, {
@@ -222,6 +222,29 @@ const EditPrizePage = () => {
   //     goal_filter();
   //   }
   // }, [member_id]);
+
+    useEffect(() => {
+      console.log(goals)
+      if(goals.length !== 0){
+        goal_filter();
+        goals.forEach(function (goal) {
+          if (Prize.goals_id.includes(goal._id)) {
+            if (user_id === goal.user_id) {
+              setUserSelectData({
+                title: goal.title,
+                id: goal._id,
+              });
+            } else if (member_id === goal.user_id) {
+              setMemberSelectData({
+                title: goal.title,
+                id: goal._id,
+              });
+            }
+          }
+        });
+        setFilterLoading(false);
+      }
+    }, [goals]);
 
   //錯誤區
   useEffect(() => {
