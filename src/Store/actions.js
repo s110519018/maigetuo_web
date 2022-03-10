@@ -38,6 +38,18 @@ import {
   EDIT_PRIZE_REQUEST,
   EDIT_PRIZE_DATA,
   EDIT_PRIZE_FAIL,
+  CARDS_DATA_REQUEST,
+  SET_CARDS_DATA,
+  CARDS_DATA_FAIL,
+  CARD_DATA_REQUEST,
+  SET_CARD_DATA,
+  CARD_DATA_FAIL,
+  EDIT_CARD_REQUEST,
+  EDIT_CARD_DATA,
+  EDIT_CARD_FAIL,
+  DELETE_CARD_REQUEST,
+  DELETE_CARD_DATA,
+  DELETE_CARD_FAIL,
 } from "./actionTypes";
 
 const SERVER_URL = "https://maigetuo.herokuapp.com/api";
@@ -297,6 +309,82 @@ export const editPrizeData = async (dispatch, options) => {
     return true;
   } catch (error) {
     dispatch({ type: EDIT_PRIZE_FAIL, payload: "編輯時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const getCardsList = async (dispatch, options) => {
+  dispatch({ type: CARDS_DATA_REQUEST });
+  const { group_id } = options;
+  try {
+    const { data } = await axios.get(
+      SERVER_URL + "/shardcards/?groupid=" + group_id
+    );
+    dispatch({
+      type: SET_CARDS_DATA,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({ type: CARDS_DATA_FAIL, payload: "載入時發生問題" });
+    console.log(error);
+  }
+};
+
+export const getCardData = async (dispatch, options) => {
+  dispatch({ type: CARD_DATA_REQUEST });
+  const { group_id, card_id } = options;
+  try {
+    const { data } = await axios.get(
+      SERVER_URL + "/shardcards/" + card_id + "?groupid=" + group_id
+    );
+    dispatch({
+      type: SET_CARD_DATA,
+      payload: data[0],
+    });
+  } catch (error) {
+    dispatch({ type: CARD_DATA_FAIL, payload: "載入時發生問題" });
+    console.log(error);
+  }
+};
+
+export const editCardData = async (dispatch, options) => {
+  dispatch({ type: EDIT_CARD_REQUEST });
+  const { group_id, card_id, title, content} = options;
+  try {
+    const { data } = await axios.put(SERVER_URL + "/shardcards/" + card_id, {
+      group_id: group_id,
+      title: title,
+      content: content,
+    });
+    dispatch({
+      type: EDIT_CARD_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: EDIT_CARD_FAIL, payload: "編輯時發生問題" });
+    console.log(error);
+    return false;
+  }
+};
+
+export const deleteCardData = async (dispatch, options) => {
+  dispatch({ type: DELETE_CARD_REQUEST });
+  const { group_id, card_id } = options;
+  try {
+    const { data } = await axios.delete(SERVER_URL + "/shardcards/" + card_id, {
+      data: {
+        group_id: group_id,
+      },
+    });
+    dispatch({
+      type: DELETE_CARD_DATA,
+      payload: data,
+    });
+    return true;
+  } catch (error) {
+    dispatch({ type: DELETE_CARD_FAIL, payload: "刪除時發生問題" });
     console.log(error);
     return false;
   }

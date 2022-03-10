@@ -212,6 +212,7 @@ const AddPrizePage = () => {
     if (member_id !== "") {
       goal_filter();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [member_id]);
 
   useEffect(() => {
@@ -219,6 +220,7 @@ const AddPrizePage = () => {
     if(goals.length !== 0){
       goal_filter();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goals]);
 
   //錯誤區

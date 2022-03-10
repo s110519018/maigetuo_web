@@ -2,92 +2,203 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as QueryString from "query-string";
-import Dialog from "@mui/material/Dialog";
-import SettingsIcon from "@mui/icons-material/Settings";
+// import Dialog from "@mui/material/Dialog";
+// import SettingsIcon from "@mui/icons-material/Settings";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
 import path from "../../utils/path";
 import Logo from "../../assets/image/Logo.png";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeButton from "../../component/CustomizeButton";
-import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+// import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+import Alert from "../../component/Alert";
+import Loading from "../../component/Loading";
 
-//https://dev.to/yutagoto/react-typescript-liff-1kpk
-//https://medium.com/frochu/%E5%9C%A8react-app%E4%B8%AD%E6%9C%80%E7%82%BA%E5%B8%B8%E8%A6%8B%E7%9A%84%E8%B7%A8%E7%AB%99%E6%94%BB%E6%93%8A%E6%BC%8F%E6%B4%9E-2fdd95f08466
-// XSS 跨站攻擊
-// text=replace(text,"/n","<br>")
-// text=replace(text," ","&nbsp;")
-// text=replace(text,"<script>","")
-// text=replace(text,"</script>","")
-// https://www.796t.com/post/NWc5eHc=.html
+//Store
+import { StoreContext } from "../../Store/reducer";
+import {
+  getGroupData,
+  setBaseData,
+  resetErrorData,
+  getCardData,
+  editCardData,
+} from "../../Store/actions";
+
 const EditSharecardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { happy } = QueryString.parse(location.search);
   // const [opencategory, setCategoryOpen] = useState(false);
+  const [Errortext, setErrortext] = useState("");
+  const [Errorshow, setErrorshow] = useState(false);
+  //因為location近來的渲染有時間差，所以還是必須加個loading
+  const [cardLoading, setcardLoading] = useState(true);
+  const [Card, setCard] = useState({});
+  const [contentText, setContentText] = useState("");
 
-  const [name, setName] = useState("Cat in the Hat");
+  const [name, setName] = useState("");
   const onChangeContent = (value) => {
     setName(value);
   };
 
-  const [datepick, setDate] = React.useState();
-  const onChangeDate = (value) => {
-    setDate(value);
-    // console.log(datepick.toString());
+  //資料內容
+  const {
+    state: {
+      baseData: {
+        group_id,
+        user_id,
+        // user_name,
+        member_id,
+        // member_name,
+        datasDataLoading,
+      },
+      cardData: { card, cardDataLoading },
+      editCard: { editCardLoading },
+      error,
+    },
+    dispatch,
+  } = useContext(StoreContext);
+
+  const save = () => {
+    try {
+      if (name === "") {
+        throw "請輸入任務名稱!";
+      } else if (name.length > 20) {
+        throw "字數過長，請低於20字";
+      } else if (contentText.length > 100) {
+        throw "詳細內容字數過長，請低於100字!";
+      } else {
+        var text;
+        text = contentText.replace("<script>", "");
+        text = text.replace("</script>", "");
+        const edit_finish = editCardData(dispatch, {
+          group_id: group_id,
+          card_id: Card._id,
+          title: name,
+          content: text,
+        });
+
+        edit_finish.then(function (result) {
+          if (result) {
+            navigate(path.sharecarddetailpage);
+          }
+        });
+      }
+    } catch (error) {
+      setErrorshow(true);
+      setErrortext(error);
+    }
   };
 
-  //寄送訊息
-  const sendMessage = () => {
-    liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}); // 第一次一定要登入
-        } else if (liff.isInClient()) {
-          // LIFFので動いているのであれば
-          liff
-            .sendMessages([
-              {
-                // 發送訊息
-                type: "text",
-                text: "You've successfully sent a message! Hooray!",
-              },
-            ])
-            .then(function () {
-              window.alert("Message sent");
-            })
-            .catch(function (error) {
-              window.alert("Error sending message: " + error);
-            });
-        }
-      });
-  };
-
-  /* 追加: Alert顯示UserProfile */
-  const getUserInfo = () => {
+  useEffect(() => {
+    resetErrorData(dispatch);
+    var { groupID } = QueryString.parse(location.search);
+    var userID = "";
+    var userName = "";
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
-      if (!liff.isLoggedIn()) {
-        liff.login({}); // ログインしていなければ最初にログインする
+      if (!liff.isLoggedIn() || liff.getOS() === "web") {
+        userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
+        userName = "小米";
+        if (groupID === "" || groupID === undefined) {
+          groupID = sessionStorage.getItem("group_id");
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        } else {
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        }
       } else if (liff.isInClient()) {
         liff
-          .getProfile() // ユーザ情報を取得する
+          .getProfile()
           .then((profile) => {
-            const userId = profile.userId;
-            const displayName = profile.displayName;
-            alert(`Name: ${displayName}, userId: ${userId}`);
+            userID = profile.userId;
+            userName = profile.displayName;
+            if (groupID === "" || groupID === undefined) {
+              groupID = sessionStorage.getItem("group_id");
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            } else {
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            }
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            setErrorshow(true);
+            setErrortext("發生錯誤，訊息:" + error);
           });
       }
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    var { cardID } = QueryString.parse(location.search);
+    if (group_id !== "") {
+      if (member_id === "") {
+        // console.log(member_id);
+        getGroupData(dispatch, { group_id: group_id, user_id: user_id });
+      }
+      if (cardID !== "" && cardID !== undefined) {
+        setcardLoading(false);
+        getCardData(dispatch, { group_id: group_id, card_id: cardID });
+      }
+      if (location.state !== null) {
+        setCard(location.state.card);
+        setName(location.state.card.title);
+        setContentText(location.state.card.content);
+        setcardLoading(false);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [group_id]);
+
+  useEffect(() => {
+    if (location.state === null && card.title !== undefined) {
+      setCard(card);
+      setName(card.title);
+      setContentText(card.content);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card]);
+
+
+  //錯誤區
+  useEffect(() => {
+    if (error !== "") {
+      setcardLoading(false);
+      setErrorshow(true);
+      setErrortext(error);
+    }
+  }, [error]);
 
   return (
-    <div className={styles.container}>
-      {/* 選擇分類 */}
-      {/* <Dialog
+    <Fragment>
+      {datasDataLoading || cardDataLoading || cardLoading || editCardLoading ? (
+        <Loading />
+      ) : (
+        <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
+          {/* 選擇分類 */}
+          {/* <Dialog
         open={opencategory}
         onClose={() => {
           setCategoryOpen(false);
@@ -117,24 +228,25 @@ const EditSharecardPage = () => {
           </button>
         </div>
       </Dialog> */}
-      <div>
-        <img src={Logo} alt="Logo" />
-        <div className={styles.top}>
-          <CustomizeButton
-            title="分享卡清單"
-            status="contained"
-            click={() => {
-              navigate(path.sharecardlistpage);
-            }}
-          />
-        </div>
-        <div className={styles.content}>
-          <CustomizeInput
-            title="分享卡名稱"
-            placeholder="請輸入分享卡名稱"
-            onChangeContent={onChangeContent}
-          />
-          {/* <div className={styles.reach}>
+          <div>
+            <img src={Logo} alt="Logo" />
+            <div className={styles.top}>
+              <CustomizeButton
+                title="分享卡清單"
+                status="contained"
+                click={() => {
+                  navigate(path.sharecardlistpage);
+                }}
+              />
+            </div>
+            <div className={styles.content}>
+              <CustomizeInput
+                title="分享卡名稱"
+                placeholder="請輸入分享卡名稱"
+                defaultValue={name}
+                onChangeContent={onChangeContent}
+              />
+              {/* <div className={styles.reach}>
             <div className={styles.reach_title}>選擇分類</div>
             <div
               className={styles.goal_selecter}
@@ -146,29 +258,35 @@ const EditSharecardPage = () => {
               <ArrowDropDownOutlinedIcon />
             </div>
           </div> */}
-          <div className={styles.detail}>
-            <div className={styles.detail_title}>內容</div>
-            <textarea placeholder="請輸入分享卡描述"></textarea>
+              <div className={styles.detail}>
+                <div className={styles.detail_title}>內容</div>
+                <textarea
+                  placeholder="請輸入分享卡描述"
+                  type="text"
+                  onChange={(e) => setContentText(e.target.value)}
+                  value={contentText}
+                ></textarea>
+              </div>
+            </div>
+            {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
+            <div className={styles.buttons}>
+              <CustomizeButton title="儲存" status="outlined" click={save} />
+              <CustomizeButton
+                title="取消"
+                status="outlined"
+                click={() => {
+                  if (location.state === null) {
+                    liff.closeWindow();
+                  } else {
+                    navigate(-1);
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
-        {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
-        <div className={styles.buttons}>
-          <CustomizeButton title="儲存" status="outlined" click={sendMessage} />
-          <CustomizeButton
-            title="取消"
-            status="outlined"
-            click={() => {
-              if (location.state === null) {
-                liff.closeWindow();
-              } else {
-                navigate(-1);
-              }
-            }}
-          />
-        </div>
-        {happy}
-      </div>
-    </div>
+      )}
+    </Fragment>
   );
 };
 

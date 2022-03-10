@@ -2,86 +2,197 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as QueryString from "query-string";
-import Dialog from "@mui/material/Dialog";
-import SettingsIcon from "@mui/icons-material/Settings";
+// import Dialog from "@mui/material/Dialog";
+// import SettingsIcon from "@mui/icons-material/Settings";
 import styles from "./styles.module.scss";
 import liff from "@line/liff";
 import path from "../../utils/path";
 import Logo from "../../assets/image/Logo.png";
 import CustomizeInput from "../../component/CustomizeInput";
 import CustomizeButton from "../../component/CustomizeButton";
-import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+// import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 
-//https://dev.to/yutagoto/react-typescript-liff-1kpk
-//https://medium.com/frochu/%E5%9C%A8react-app%E4%B8%AD%E6%9C%80%E7%82%BA%E5%B8%B8%E8%A6%8B%E7%9A%84%E8%B7%A8%E7%AB%99%E6%94%BB%E6%93%8A%E6%BC%8F%E6%B4%9E-2fdd95f08466
-// XSS 跨站攻擊
-// text=replace(text,"/n","<br>")
-// text=replace(text," ","&nbsp;")
-// text=replace(text,"<script>","")
-// text=replace(text,"</script>","")
-// https://www.796t.com/post/NWc5eHc=.html
+import Alert from "../../component/Alert";
+import Loading from "../../component/Loading";
+
+//Store
+import { StoreContext } from "../../Store/reducer";
+import { getGroupData, setBaseData, resetErrorData } from "../../Store/actions";
+
 const AddSharecardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { happy } = QueryString.parse(location.search);
   // const [opencategory, setCategoryOpen] = useState(false);
+  const [Errorshow, setErrorshow] = React.useState(false);
+  const [Errortext, setErrortext] = React.useState("");
 
-  const [name, setName] = useState("Cat in the Hat");
+  const [contentText, setContentText] = useState("");
+  const [name, setName] = useState("");
   const onChangeContent = (value) => {
     setName(value);
   };
 
+  //資料內容
+  const {
+    state: {
+      baseData: {
+        group_id,
+        user_id,
+        // user_name,
+        member_id,
+        // member_name,
+        datasDataLoading,
+      },
+      error,
+    },
+    dispatch,
+  } = useContext(StoreContext);
+
   //寄送訊息
   const sendMessage = () => {
-    liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
-      .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}); // 第一次一定要登入
-        } else if (liff.isInClient()) {
-          // LIFFので動いているのであれば
-          liff
-            .sendMessages([
-              {
-                // 發送訊息
-                type: "text",
-                text: "You've successfully sent a message! Hooray!",
-              },
-            ])
-            .then(function () {
-              window.alert("Message sent");
-            })
-            .catch(function (error) {
-              window.alert("Error sending message: " + error);
-            });
-        }
-      });
+    if (name === "") {
+      setErrorshow(true);
+      setErrortext("請輸入任務名稱!");
+    } else if (name.length > 20) {
+      setErrorshow(true);
+      setErrortext("字數過長，請低於20字!");
+    } else if (
+      name.includes("[") ||
+      name.includes("]") ||
+      name.includes(")") ||
+      name.includes("(") ||
+      contentText.includes("(") ||
+      contentText.includes(")") ||
+      contentText.includes("[") ||
+      contentText.includes("]")
+    ) {
+      setErrorshow(true);
+      setErrortext("因傳送需求限制，請勿輸入'['或']'、'('或')'");
+    } else if (contentText.length > 100) {
+      setErrorshow(true);
+      setErrortext("詳細內容字數過長，請低於100字!");
+    } else {
+      var text;
+      text = contentText.replace("<script>", "");
+      text = text.replace("</script>", "");
+      liff
+        .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            // liff.login({}); // 第一次一定要登入
+            setErrorshow(true);
+            setErrortext("請在line群組中操作唷!");
+            console.log("我要新增分享卡: [" + name + "] (" + text + ")");
+          } else if (liff.isInClient()) {
+            // LIFFので動いているのであれば
+            liff
+              .sendMessages([
+                {
+                  // 發送訊息
+                  type: "text",
+                  text: "我要新增分享卡: [" + name + "] (" + text + ")",
+                },
+              ])
+              .then(function () {
+                liff.closeWindow();
+              })
+              .catch(function (error) {
+                setErrorshow(true);
+                setErrortext("失敗" + error);
+              });
+          }
+        });
+    }
   };
 
-  /* 追加: Alert顯示UserProfile */
-  const getUserInfo = () => {
+  useEffect(() => {
+    resetErrorData(dispatch);
+    var { groupID } = QueryString.parse(location.search);
+    var userID = "";
+    var userName = "";
     liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
-      if (!liff.isLoggedIn()) {
-        liff.login({}); // ログインしていなければ最初にログインする
+      if (!liff.isLoggedIn() || liff.getOS() === "web") {
+        userID = "Uf0f4bc17047f7eb01ddfc0893a68786c";
+        userName = "阿呆";
+        if (groupID === "" || groupID === undefined) {
+          groupID = sessionStorage.getItem("group_id");
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        } else {
+          setBaseData(dispatch, {
+            group_id: groupID,
+            user_id: userID,
+            user_name: userName,
+          });
+        }
       } else if (liff.isInClient()) {
         liff
-          .getProfile() // ユーザ情報を取得する
+          .getProfile()
           .then((profile) => {
-            const userId = profile.userId;
-            const displayName = profile.displayName;
-            alert(`Name: ${displayName}, userId: ${userId}`);
+            userID = profile.userId;
+            userName = profile.displayName;
+            if (groupID === "" || groupID === undefined) {
+              groupID = sessionStorage.getItem("group_id");
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            } else {
+              setBaseData(dispatch, {
+                group_id: groupID,
+                user_id: userID,
+                user_name: userName,
+              });
+            }
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            setErrorshow(true);
+            setErrortext("發生錯誤，訊息：" + error);
           });
       }
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (group_id !== "") {
+      if (member_id === "") {
+        // console.log(member_id);
+        getGroupData(dispatch, { group_id: group_id, user_id: user_id });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [group_id]);
+
+  //錯誤區
+  useEffect(() => {
+    if (error !== "") {
+      setErrorshow(true);
+      setErrortext(error);
+    }
+  }, [error]);
 
   return (
-    <div className={styles.container}>
-      {/* 選擇分類 */}
-      {/* <Dialog
+    <Fragment>
+      {datasDataLoading ? (
+        <Loading />
+      ) : (
+        <div className={styles.container}>
+          <Alert
+            status="error"
+            open={Errorshow}
+            handleClose={() => {
+              setErrorshow(false);
+              resetErrorData(dispatch);
+            }}
+            text={Errortext}
+          />
+          {/* 選擇分類 */}
+          {/* <Dialog
         open={opencategory}
         onClose={() => {
           setCategoryOpen(false);
@@ -111,24 +222,24 @@ const AddSharecardPage = () => {
           </button>
         </div>
       </Dialog> */}
-      <div>
-        <img src={Logo} alt="Logo" />
-        <div className={styles.top}>
-          <CustomizeButton
-            title="分享卡清單"
-            status="contained"
-            click={() => {
-              navigate(path.sharecardlistpage);
-            }}
-          />
-        </div>
-        <div className={styles.content}>
-          <CustomizeInput
-            title="分享卡名稱"
-            placeholder="請輸入分享卡名稱"
-            onChangeContent={onChangeContent}
-          />
-          {/* <div className={styles.reach}>
+          <div>
+            <img src={Logo} alt="Logo" />
+            <div className={styles.top}>
+              <CustomizeButton
+                title="分享卡清單"
+                status="contained"
+                click={() => {
+                  navigate(path.sharecardlistpage);
+                }}
+              />
+            </div>
+            <div className={styles.content}>
+              <CustomizeInput
+                title="分享卡名稱"
+                placeholder="請輸入分享卡名稱"
+                onChangeContent={onChangeContent}
+              />
+              {/* <div className={styles.reach}>
             <div className={styles.reach_title}>選擇分類</div>
             <div
               className={styles.goal_selecter}
@@ -140,29 +251,38 @@ const AddSharecardPage = () => {
               <ArrowDropDownOutlinedIcon />
             </div>
           </div> */}
-          <div className={styles.detail}>
-            <div className={styles.detail_title}>內容</div>
-            <textarea placeholder="請輸入分享卡描述"></textarea>
+              <div className={styles.detail}>
+                <div className={styles.detail_title}>內容</div>
+                <textarea
+                  placeholder="請輸入分享卡描述"
+                  type="text"
+                  onChange={(e) => setContentText(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
+            {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
+            <div className={styles.buttons}>
+              <CustomizeButton
+                title="新增"
+                status="outlined"
+                click={sendMessage}
+              />
+              <CustomizeButton
+                title="取消"
+                status="outlined"
+                click={() => {
+                  if (location.state === null) {
+                    liff.closeWindow();
+                  } else {
+                    navigate(-1);
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
-        {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
-        <div className={styles.buttons}>
-          <CustomizeButton title="新增" status="outlined" click={sendMessage} />
-          <CustomizeButton
-            title="取消"
-            status="outlined"
-            click={() => {
-              if (location.state === null) {
-                liff.closeWindow();
-              } else {
-                navigate(-1);
-              }
-            }}
-          />
-        </div>
-        {happy}
-      </div>
-    </div>
+      )}
+    </Fragment>
   );
 };
 

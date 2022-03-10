@@ -71,6 +71,14 @@ const AddGoalPage = () => {
     } else if (name.length > 20) {
       setErrorshow(true);
       setErrortext("字數過長，請低於20字!");
+    } else if (
+      name.includes("[") ||
+      name.includes("]") ||
+      name.includes(")") ||
+      name.includes("(")
+    ) {
+      setErrorshow(true);
+      setErrortext("因傳送需求限制，請勿輸入'['或']'、'('或')'");
     } else {
       liff
         .init({ liffId: process.env.REACT_APP_LIFF_ID }) // LIFF IDをセットする

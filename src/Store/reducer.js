@@ -39,6 +39,18 @@ import {
   EDIT_PRIZE_REQUEST,
   EDIT_PRIZE_DATA,
   EDIT_PRIZE_FAIL,
+  CARDS_DATA_REQUEST,
+  SET_CARDS_DATA,
+  CARDS_DATA_FAIL,
+  CARD_DATA_REQUEST,
+  SET_CARD_DATA,
+  CARD_DATA_FAIL,
+  EDIT_CARD_REQUEST,
+  EDIT_CARD_DATA,
+  EDIT_CARD_FAIL,
+  DELETE_CARD_REQUEST,
+  DELETE_CARD_DATA,
+  DELETE_CARD_FAIL,
 } from "./actionTypes";
 
 export const StoreContext = createContext();
@@ -91,6 +103,20 @@ const initialState = {
   },
   editPrize: {
     editPrizeLoading: false,
+  },
+  cardsData: {
+    cards: [],
+    cardsDataLoading: false,
+  },
+  cardData: {
+    card: {},
+    cardDataLoading: false,
+  },
+  editCard: {
+    editCardLoading: false,
+  },
+  deleteCard: {
+    deleteCardLoading: false,
   },
   error: "",
 };
@@ -484,7 +510,7 @@ function reducer(state, action) {
         prizeData: {
           ...state.prizeData,
           prize: action.payload.Singleprize,
-          goals:action.payload.Allgoal,
+          goals: action.payload.Allgoal,
           prizeDataLoading: false,
         },
         editPrize: {
@@ -499,6 +525,134 @@ function reducer(state, action) {
         editPrize: {
           ...state.editPrize,
           editPrizeLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //分享卡列表載入
+    case CARDS_DATA_REQUEST:
+      return {
+        ...state,
+        cardsData: {
+          ...state.cardsData,
+          cardsDataLoading: true,
+        },
+        error: "",
+      };
+    case SET_CARDS_DATA:
+      return {
+        ...state,
+        cardsData: {
+          ...state.cardsData,
+          cards: action.payload,
+          cardsDataLoading: false,
+        },
+        error: "",
+      };
+    case CARDS_DATA_FAIL:
+      return {
+        ...state,
+        cardsData: {
+          ...state.cardsData,
+          cardsDataLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //單一分享卡載入
+    case CARD_DATA_REQUEST:
+      return {
+        ...state,
+        cardData: {
+          card: {},
+          cardDataLoading: true,
+        },
+        error: "",
+      };
+    case SET_CARD_DATA:
+      return {
+        ...state,
+        cardData: {
+          ...state.cardData,
+          card: action.payload,
+          cardDataLoading: false,
+        },
+        error: "",
+      };
+    case CARD_DATA_FAIL:
+      return {
+        ...state,
+        cardData: {
+          ...state.cardData,
+          cardDataLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //編輯分享卡
+    case EDIT_CARD_REQUEST:
+      return {
+        ...state,
+        editCard: {
+          ...state.editCard,
+          editCardLoading: true,
+        },
+        error: "",
+      };
+    case EDIT_CARD_DATA:
+      return {
+        ...state,
+        cardData: {
+          ...state.cardData,
+          card: action.payload,
+          cardDataLoading: false,
+        },
+        editCard: {
+          ...state.editGoal,
+          editCardLoading: false,
+        },
+        error: "",
+      };
+    case EDIT_CARD_FAIL:
+      return {
+        ...state,
+        editCard: {
+          ...state.editCard,
+          editCardLoading: false,
+        },
+        error: action.payload,
+      };
+
+    //刪除分享卡
+    case DELETE_CARD_REQUEST:
+      return {
+        ...state,
+        deleteCard: {
+          ...state.deleteCard,
+          deleteCardLoading: true,
+        },
+        error: "",
+      };
+    case DELETE_CARD_DATA:
+      return {
+        ...state,
+        cardsData: {
+          ...state.cardsData,
+          cards: action.payload,
+          cardsDataLoading: false,
+        },
+        deleteCard: {
+          ...state.deleteCard,
+          deleteCardLoading: false,
+        },
+        error: "",
+      };
+    case DELETE_CARD_FAIL:
+      return {
+        ...state,
+        deleteCard: {
+          ...state.deleteCard,
+          deleteCardLoading: false,
         },
         error: action.payload,
       };

@@ -223,28 +223,28 @@ const EditPrizePage = () => {
   //   }
   // }, [member_id]);
 
-    useEffect(() => {
-      console.log(goals)
-      if(goals.length !== 0){
-        goal_filter();
-        goals.forEach(function (goal) {
-          if (Prize.goals_id.includes(goal._id)) {
-            if (user_id === goal.user_id) {
-              setUserSelectData({
-                title: goal.title,
-                id: goal._id,
-              });
-            } else if (member_id === goal.user_id) {
-              setMemberSelectData({
-                title: goal.title,
-                id: goal._id,
-              });
-            }
+  useEffect(() => {
+    console.log(goals);
+    if (goals.length !== 0) {
+      goal_filter();
+      goals.forEach(function (goal) {
+        if (Prize.goals_id.includes(goal._id)) {
+          if (user_id === goal.user_id) {
+            setUserSelectData({
+              title: goal.title,
+              id: goal._id,
+            });
+          } else if (member_id === goal.user_id) {
+            setMemberSelectData({
+              title: goal.title,
+              id: goal._id,
+            });
           }
-        });
-        setFilterLoading(false);
-      }
-    }, [goals]);
+        }
+      });
+      setFilterLoading(false);
+    }
+  }, [goals]);
 
   //錯誤區
   useEffect(() => {
@@ -443,11 +443,7 @@ const EditPrizePage = () => {
             </div>
             {/* https://ithelp.ithome.com.tw/articles/10229445 子傳父 父傳子*/}
             <div className={styles.buttons}>
-              <CustomizeButton
-                title="儲存"
-                status="outlined"
-                click={save}
-              />
+              <CustomizeButton title="儲存" status="outlined" click={save} />
               <CustomizeButton
                 title="取消"
                 status="outlined"

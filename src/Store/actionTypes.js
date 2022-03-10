@@ -48,3 +48,19 @@ export const PRIZE_DATA_FAIL = 'PRIZE_DATA_FAIL';
 export const EDIT_PRIZE_REQUEST = 'EDIT_PRIZE_REQUEST';
 export const EDIT_PRIZE_DATA = 'EDIT_PRIZE_DATA';
 export const EDIT_PRIZE_FAIL = 'EDIT_PRIZE_FAIL';
+//分享卡載入
+export const CARDS_DATA_REQUEST ='CARDS_DATA_REQUEST';
+export const SET_CARDS_DATA = 'SET_CARDS_DATA';
+export const CARDS_DATA_FAIL = 'CARDS_DATA_FAIL';
+//單一分享卡載入
+export const CARD_DATA_REQUEST = 'CARD_DATA_REQUEST';
+export const SET_CARD_DATA = 'SET_CARD_DATA';
+export const CARD_DATA_FAIL = 'CARD_DATA_FAIL';
+//刪除分享卡
+export const DELETE_CARD_REQUEST = 'DELETE_CARD_REQUEST';
+export const DELETE_CARD_DATA = 'DELETE_CARD_DATA';
+export const DELETE_CARD_FAIL = 'DELETE_CARD_FAIL';
+//編輯目標
+export const EDIT_CARD_REQUEST = 'EDIT_CARD_REQUEST';
+export const EDIT_CARD_DATA = 'EDIT_CARD_DATA';
+export const EDIT_CARD_FAIL = 'EDIT_CARD_FAIL';
