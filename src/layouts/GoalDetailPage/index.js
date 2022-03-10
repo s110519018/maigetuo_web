@@ -89,17 +89,48 @@ const GoalDetailPage = () => {
     }
   };
   const save = () => {
-      const finish = updateGoalData(dispatch, {
-        group_id: group_id,
-        goal_id: Goal._id,
-        missions: Goal.missions,
-      });
-      finish.then(function (result) {
-        // console.log(result);
-        if (result) {
-          setEditmode(false);
+    const finish = updateGoalData(dispatch, {
+      group_id: group_id,
+      goal_id: Goal._id,
+      missions: Goal.missions,
+    });
+    finish.then(function (result) {
+      // console.log(result);
+      if (result) {
+        if (result.length !== 0) {
+          liff.init({ liffId: process.env.REACT_APP_LIFF_ID }).then(() => {
+            if (!liff.isLoggedIn()) {
+              // liff.login({}); // 第一次一定要登入
+              setErrorshow(true);
+              setErrortext("請在line群組中操作唷!");
+              console.log(
+                "完成獎勵"+
+                result
+              );
+            } else if (liff.isInClient()) {
+              liff
+                .sendMessages([
+                  {
+                    type: "image",
+                    originalContentUrl:
+                      "https://i.imgur.com/xZEhZ34.png" + "?finish_prize=" + result,
+                    previewImageUrl:
+                      "https://i.imgur.com/xZEhZ34.png" + "?finish_prize=" + result,
+                  },
+                ])
+                .then(function () {
+                  // liff.closeWindow();
+                })
+                .catch(function (error) {
+                  setErrorshow(true);
+                  setErrortext("發生錯誤請聯絡管理員" + error);
+                });
+            }
+          });
         }
-      });
+        setEditmode(false);
+      }
+    });
   };
 
   const handleClickOpen = () => {
@@ -247,72 +278,76 @@ const GoalDetailPage = () => {
               <CustomizeProfile name={user_name} />
             </div>
             <div className={styles.buttons}>
-              {Goal.missions !== undefined ? Goal.user_id === user_id ? (
-                <Fragment>
-                  {!editmode ? (
-                    <Fragment>
-                      <CustomizeButton
-                        status="contained"
-                        title="編輯"
-                        mr="0"
-                        click={() => {
-                          navigate(path.editgoalpage, {
-                            state: {
-                              lastpath: location.pathname,
-                              goal: Goal,
-                            },
-                          });
-                        }}
-                      />
-                      <CustomizeButton
-                        status="contained"
-                        title="刪除"
-                        mr="0"
-                        click={handleClickOpen}
-                      />
-                      <CustomizeButton
-                        status="contained"
-                        title="更新進度"
-                        mr="0"
-                        click={() => {
-                          setEditmode(true);
-                        }}
-                      />
-                    </Fragment>
-                  ) : (
-                    <Fragment>
-                      <CustomizeButton
-                        status="contained"
-                        title="更新"
-                        mr="0"
-                        click={save}
-                      />
-                      <CustomizeButton
-                        status="contained"
-                        title="取消"
-                        mr="0"
-                        click={() => {
-                          setEditmode(false);
-                        }}
-                      />
-                    </Fragment>
-                  )}
-                </Fragment>
+              {Goal.missions !== undefined ? (
+                Goal.user_id === user_id ? (
+                  <Fragment>
+                    {!editmode ? (
+                      <Fragment>
+                        <CustomizeButton
+                          status="contained"
+                          title="編輯"
+                          mr="0"
+                          click={() => {
+                            navigate(path.editgoalpage, {
+                              state: {
+                                lastpath: location.pathname,
+                                goal: Goal,
+                              },
+                            });
+                          }}
+                        />
+                        <CustomizeButton
+                          status="contained"
+                          title="刪除"
+                          mr="0"
+                          click={handleClickOpen}
+                        />
+                        <CustomizeButton
+                          status="contained"
+                          title="更新進度"
+                          mr="0"
+                          click={() => {
+                            setEditmode(true);
+                          }}
+                        />
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <CustomizeButton
+                          status="contained"
+                          title="更新"
+                          mr="0"
+                          click={save}
+                        />
+                        <CustomizeButton
+                          status="contained"
+                          title="取消"
+                          mr="0"
+                          click={() => {
+                            setEditmode(false);
+                          }}
+                        />
+                      </Fragment>
+                    )}
+                  </Fragment>
+                ) : (
+                  <CustomizeButton
+                    status="contained"
+                    title="規劃進度"
+                    mr=""
+                    click={() => {
+                      navigate(path.plangoalpage, {
+                        state: {
+                          lastpath: location.pathname,
+                          goal: Goal,
+                        },
+                      });
+                    }}
+                  />
+                )
               ) : (
-                <CustomizeButton
-                  status="contained"
-                  title="規劃進度"
-                  mr=""
-                  click={() => {
-                    navigate(path.plangoalpage, {
-                      state: {
-                        lastpath: location.pathname,
-                        goal: Goal,
-                      },
-                    });
-                  }}
-                />
-              ):""}
+                ""
+              )}
             </div>
             <div className={styles.goal}>
               <CustomizeInput
@@ -331,82 +366,90 @@ const GoalDetailPage = () => {
                 </div>
               ) : (
                 <div className={styles.edit}>
-                  {Goal.missions !== undefined ? Goal.missions.length === 0 ? (
-                    <div className={styles.empty}>目前無任務</div>
-                  ) : (
-                    <Fragment>
-                      {Goal.missions
-                        .sort(
-                          (a, b) =>
-                            new Date(...a.deadline.split("/")) -
-                            new Date(...b.deadline.split("/"))
-                        )
-                        .map((mission) => (
-                          <div className={styles.time}>
-                            <TextField
-                              disabled
-                              multiline
-                              id="standard-basic"
-                              variant="standard"
-                              defaultValue={mission.deadline}
-                              className={classes.time}
-                            />
-                            <TextField
-                              disabled
-                              multiline
-                              id="standard-basic"
-                              variant="standard"
-                              defaultValue={mission.title}
-                              className={classes.time}
-                            />
-                            <div className={styles.finish_status}>
-                              <label
-                                htmlFor={"O" + mission._id}
-                                className={
-                                  mission.status === "O"
-                                    ? styles.label_click
-                                    : ""
-                                }
-                              >
-                                O
-                              </label>
-                              <label
-                                htmlFor={"X" + mission._id}
-                                className={
-                                  mission.status === "X"
-                                    ? styles.label_click
-                                    : ""
-                                }
-                              >
-                                X
-                              </label>
-                              <Radio
-                                style={{ display: "none" }}
-                                id={"O" + mission._id}
-                                checked={mission.status === "O"}
-                                onChange={(event) => {
-                                  handleStatusChange(mission._id, event);
-                                }}
-                                value="O"
-                                name="radio-buttons"
-                                inputProps={{ "aria-label": "O" + mission._id }}
+                  {Goal.missions !== undefined ? (
+                    Goal.missions.length === 0 ? (
+                      <div className={styles.empty}>目前無任務</div>
+                    ) : (
+                      <Fragment>
+                        {Goal.missions
+                          .sort(
+                            (a, b) =>
+                              new Date(...a.deadline.split("/")) -
+                              new Date(...b.deadline.split("/"))
+                          )
+                          .map((mission) => (
+                            <div className={styles.time}>
+                              <TextField
+                                disabled
+                                multiline
+                                id="standard-basic"
+                                variant="standard"
+                                defaultValue={mission.deadline}
+                                className={classes.time}
                               />
-                              <Radio
-                                style={{ display: "none" }}
-                                id={"X" + mission._id}
-                                checked={mission.status === "X"}
-                                onChange={(event) => {
-                                  handleStatusChange(mission._id, event);
-                                }}
-                                value="X"
-                                name="radio-buttons"
-                                inputProps={{ "aria-label": "X" + mission._id }}
+                              <TextField
+                                disabled
+                                multiline
+                                id="standard-basic"
+                                variant="standard"
+                                defaultValue={mission.title}
+                                className={classes.time}
                               />
+                              <div className={styles.finish_status}>
+                                <label
+                                  htmlFor={"O" + mission._id}
+                                  className={
+                                    mission.status === "O"
+                                      ? styles.label_click
+                                      : ""
+                                  }
+                                >
+                                  O
+                                </label>
+                                <label
+                                  htmlFor={"X" + mission._id}
+                                  className={
+                                    mission.status === "X"
+                                      ? styles.label_click
+                                      : ""
+                                  }
+                                >
+                                  X
+                                </label>
+                                <Radio
+                                  style={{ display: "none" }}
+                                  id={"O" + mission._id}
+                                  checked={mission.status === "O"}
+                                  onChange={(event) => {
+                                    handleStatusChange(mission._id, event);
+                                  }}
+                                  value="O"
+                                  name="radio-buttons"
+                                  inputProps={{
+                                    "aria-label": "O" + mission._id,
+                                  }}
+                                />
+                                <Radio
+                                  style={{ display: "none" }}
+                                  id={"X" + mission._id}
+                                  checked={mission.status === "X"}
+                                  onChange={(event) => {
+                                    handleStatusChange(mission._id, event);
+                                  }}
+                                  value="X"
+                                  name="radio-buttons"
+                                  inputProps={{
+                                    "aria-label": "X" + mission._id,
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                    </Fragment>
-                  ):(<div className={styles.empty}>目前無任務</div>)}
+                          ))}
+                      </Fragment>
+                    )
+                  ) : (
+                    <div className={styles.empty}>目前無任務</div>
+                  )}
                 </div>
               )}
             </div>

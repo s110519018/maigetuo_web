@@ -40,8 +40,8 @@ import {
   EDIT_PRIZE_FAIL,
 } from "./actionTypes";
 
-const SERVER_URL = "https://maigetuo.herokuapp.com/api";
-// const SERVER_URL = "http://localhost:5000/api";
+// const SERVER_URL = "https://maigetuo.herokuapp.com/api";
+const SERVER_URL = "http://localhost:5000/api";
 
 export const resetErrorData = async (dispatch, options) => {
   dispatch({
@@ -192,9 +192,9 @@ export const updateGoalData = async (dispatch, options) => {
     );
     dispatch({
       type: UPDATE_GOAL_DATA,
-      payload: data,
+      payload: data.goal,
     });
-    return true;
+    return data.finish;
   } catch (error) {
     dispatch({ type: UPDATE_GOAL_FAIL, payload: "在更新進度時發生問題" });
     console.log(error);
