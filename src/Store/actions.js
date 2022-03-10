@@ -40,8 +40,8 @@ import {
   EDIT_PRIZE_FAIL,
 } from "./actionTypes";
 
-// const SERVER_URL = "https://maigetuo.herokuapp.com/api";
-const SERVER_URL = "http://localhost:5000/api";
+const SERVER_URL = "https://maigetuo.herokuapp.com/api";
+// const SERVER_URL = "http://localhost:5000/api";
 
 export const resetErrorData = async (dispatch, options) => {
   dispatch({
