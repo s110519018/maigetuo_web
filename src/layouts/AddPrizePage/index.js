@@ -214,6 +214,13 @@ const AddPrizePage = () => {
     }
   }, [member_id]);
 
+  useEffect(() => {
+    console.log(goals)
+    if(goals.length !== 0){
+      goal_filter();
+    }
+  }, [goals]);
+
   //錯誤區
   useEffect(() => {
     if (error !== "") {
