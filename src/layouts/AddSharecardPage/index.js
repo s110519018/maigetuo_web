@@ -82,7 +82,7 @@ const AddSharecardPage = () => {
             // liff.login({}); // 第一次一定要登入
             setErrorshow(true);
             setErrortext("請在line群組中操作唷!");
-            console.log("我要新增分享卡: [" + name + "] (" + text + ")");
+            console.log("新增分享卡: [" + name + "] (" + text + ")");
           } else if (liff.isInClient()) {
             // LIFFので動いているのであれば
             liff
@@ -90,7 +90,7 @@ const AddSharecardPage = () => {
                 {
                   // 發送訊息
                   type: "text",
-                  text: "我要新增分享卡: [" + name + "] (" + text + ")",
+                  text: "新增分享卡: [" + name + "] (" + text + ")",
                 },
               ])
               .then(function () {

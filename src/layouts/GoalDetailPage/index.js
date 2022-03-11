@@ -113,9 +113,9 @@ const GoalDetailPage = () => {
                   {
                     type: "image",
                     originalContentUrl:
-                      "https://i.imgur.com/xZEhZ34.png" + "?finish_prize=" + result,
+                      "https://i.imgur.com/ZtUghHh.png" + "?finish_prize=" + result,
                     previewImageUrl:
-                      "https://i.imgur.com/xZEhZ34.png" + "?finish_prize=" + result,
+                      "https://i.imgur.com/dEEfgUE.png" + "?finish_prize=" + result,
                   },
                 ])
                 .then(function () {

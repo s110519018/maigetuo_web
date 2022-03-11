@@ -125,9 +125,9 @@ const AddPrizePage = () => {
                     {
                       type: "image",
                       originalContentUrl:
-                        "https://i.imgur.com/xZEhZ34.png" + "?prize_id="+result,
+                        "https://i.imgur.com/J9QFfwI.png" + "?prize_id="+result,
                       previewImageUrl:
-                        "https://i.imgur.com/AH6T08f.png" + "?prize_id="+result,
+                        "https://i.imgur.com/dEEfgUE.png" + "?prize_id="+result,
                     },
                   ])
                   .then(function () {
