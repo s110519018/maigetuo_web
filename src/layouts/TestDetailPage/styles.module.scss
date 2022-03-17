@@ -1,0 +1,10 @@
+@import "../../styles/color.scss";
+@import "../../styles/spacing.scss";
+@import "../../styles/font.scss";
+.container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100vh;
+}

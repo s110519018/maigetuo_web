@@ -17,6 +17,7 @@ import SharecardDetailPage from "../layouts/SharecardDetailPage";
 import AddSharecardPage from "../layouts/AddSharecardPage";
 import EditSharecardPage from "../layouts/EditSharecardPage";
 import SharecardCategoryPage from "../layouts/SharecardCategoryPage";
+import TestDetailPage from "../layouts/TestDetailPage";
 
 const WebRoutes = () => {
   useEffect(() => {
@@ -52,6 +53,7 @@ const WebRoutes = () => {
             path={path.sharecardcategorypage}
             element={<SharecardCategoryPage />}
           />
+          <Route path={path.testdetailpage} element={<TestDetailPage />} />
         </Routes>
       </Router>
     </StoreProvider>
