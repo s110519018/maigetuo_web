@@ -7,4 +7,46 @@
   flex-direction: column;
   gap: 12px;
   min-height: 100vh;
+  background-color:  white;
+}
+h1{
+  text-align: center;
+  font-weight: bold;
+  color: #08415c;
+
+}
+.title{
+  font-weight: bold;
+  @include title_bold;
+  margin-top: 8px;
+  color: #08415c;
+}
+ul{
+  margin: 0;
+  padding: 0;
+  padding-left: 28px;
+}
+li{
+  padding: 0;
+  margin: 0;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+.content{
+  @include sencond-title;
+  word-break: break-all;
+}
+
+a{
+  font-weight: bold;
+  background-color: #50b2c0;
+  color: #000;
+}
+a:hover{
+  background-color: #50b2c0;
+  color: #fff;
+}
+.end{
+  margin-top: 20px;
+  text-align: center;
 }
