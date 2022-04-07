@@ -39,7 +39,7 @@ const TestDetailPage = () => {
         <div className={styles.title}>可能承受的風險及因應的措施：</div>
         <div className={styles.content}>本研究招募年齡、性別不限，招募覺得自己有拖延問題的人，並有一位夥伴也有拖延問題，與其搭檔以雙人為一組參與本實驗。</div>
 
-        <div className={styles.title}>研究資療之保存期限及運用規劃：</div>
+        <div className={styles.title}>研究資料之保存期限及運用規劃：</div>
         <div className={styles.content}>本研究所收集之資料只會使用在本研究中，若您有任何疑慮，歡迎提出刪除您個人資料之要求，未來研究結果呈現時將不會呈現您的真實姓名或個人資料。</div>
 
         <div className={styles.title}>暫停和退出研究之權益：</div>
